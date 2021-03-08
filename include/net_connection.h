@@ -25,12 +25,9 @@ public:
 			[this](std::error_code ec, asio::ip::tcp::endpoint endpoints)
 			{
 				if (!ec)
-				{
-					std::cout << "[net_connection][Connect]: connected" << std::endl;
 					Read();
-				}
 				else
-					std::cerr << "[net_connection][Connect]: " << ec.message() << std::endl;
+					std::cerr << "[net_connection][Connect]: " << ec.message() << "\n";
 			}
 		);
 	}
@@ -48,7 +45,7 @@ public:
 
 	void Send(std::string_view msg)
 	{
-		std::cout << ">> " << msg << std::endl;
+		std::cout << ">> " << msg << "\n";
 		m_Socket.write_some(asio::buffer(msg.data(), msg.size()));
 	}
 	
@@ -65,7 +62,7 @@ public:
 				}
 				else
 				{
-					std::cerr << "[net_connection]:[Read] " << ec.message() << std::endl;
+					std::cerr << "[net_connection]:[Read] " << ec.message() << "\n";
 				}
 			}
 		);

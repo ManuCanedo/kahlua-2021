@@ -31,7 +31,7 @@ public:
 		}
 		catch (std::exception& e)
 		{
-			std::cerr << "[net_client]:[Connect] " << e.what() << std::endl;
+			std::cerr << "[net_client]:[Connect] " << e.what() << "\n";
 			return false;
 		}
 		return true;
