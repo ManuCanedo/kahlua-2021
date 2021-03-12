@@ -1,4 +1,4 @@
-# Jayne Bot
+# CoachMe Bot
 
 Twitch Bot using C++ and embedded Lua.
 
