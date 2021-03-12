@@ -57,7 +57,7 @@ public:
 				if (!ec)
 				{
 					std::string msg(m_Buffer.data(), len);
-					(msg == "PING") ? Send("PONG") : AddToMessageQueue(msg);
+					(msg == "PING :tmi.twitch.tv") ? Send("PONG :tmi.twitch.tv") : AddToMessageQueue(msg);
 					Read();
 				}
 				else

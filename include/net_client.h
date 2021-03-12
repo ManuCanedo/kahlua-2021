@@ -19,6 +19,11 @@ public:
 	}
 
 public:
+	bool IsConnected()
+	{
+		return (m_Connection) ? m_Connection->IsConnected() : false;
+	}
+
 	bool Connect(std::string_view host, std::string_view port)
 	{
 		try
@@ -36,7 +41,7 @@ public:
 		}
 		return true;
 	}
-	
+
 	void Disconnect()
 	{
 		if (IsConnected()) 
@@ -47,17 +52,13 @@ public:
 		m_Connection.release();
 	}
 
-	bool IsConnected()
-	{
-		return (m_Connection) ? m_Connection->IsConnected() : false;
-	}
-
 	void Send(std::string_view msg)
 	{
 		if (IsConnected())
 			m_Connection->Send(msg);
 	}
 
+protected:
 	auto& MessagesQueue()
 	{
 		return m_Messages;
