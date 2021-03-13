@@ -1,7 +1,8 @@
+--[[	THIS FILE CONTAINS THE CONFIGURATION THAT THE SPANISH STREAMER TORENE33 USES AT HIS STREAM. I KEEP IT THIS WAY AS AN EXAMPLE OF THE BOT FUNCTIONALITY	]]
 -- Twitch Connection params
 _channel = "torene33"
-_oauth = "u8pf2yy60tckz4enope5555474tzmu"
-_botname = "coachme_bot"
+_oauth = "" --Oauth code needed
+_botname = "" --Bot twitch account username needed
 
 
 -- Users that can interact with bot
@@ -83,7 +84,7 @@ end
 deaths = 0
 function muerto(host, user)
 	deaths = deaths + 1
-	str = _channel .. " ha muerto " .. deaths .. " veces."
+	local str = _channel .. " ha muerto " .. deaths .. " veces."
 	if deaths > 10 then
 		str = str .. " Ha llegado a bot500!"
 	end
