@@ -1,11 +1,11 @@
 -- Twitch Connection params
-_channel = "torene33"
+_channel = "jayne"
 _oauth = "u8pf2yy60tckz4enope5555474tzmu"
 _botname = "coachme_bot"
 
 
 -- Users that can interact with bot
-_users = { 
+_users = {
 	"all",
 	"letidguez",
 	"mixi6",
@@ -81,6 +81,7 @@ function dados(host, user)
 end
 
 deaths = 0
+
 function muerto(host, user)
 	deaths = deaths + 1
 	str = _channel .. " ha muerto " .. deaths .. " veces."

@@ -8,11 +8,21 @@ extern "C"
 #include "flite.h"
 }
 
+#define PROFILING 0
+#if PROFILING
+#define PROFILE_SCOPE(name) InstrumentationTimer timer##__LINE__(name)
+#define PROFILE_FUNCTION() PROFILE_SCOPE(__FUNCTION__)
+#else
+#define PROFILE_SCOPE(name) 
+#define PROFILE_FUNCTION() 
+#endif
+
 // FLITE functions
 extern "C" cst_voice *register_cmu_us_kal();
 
 inline void TextToSpeech(const char *str)
 {
+	PROFILE_FUNCTION();
 	cst_voice *v;
 	flite_init();
 	v = register_cmu_us_kal();
@@ -22,10 +32,10 @@ inline void TextToSpeech(const char *str)
 // LUA functions
 inline bool CheckLua(lua_State *L, int r)
 {
+	PROFILE_FUNCTION();
 	if (r != 0)
 	{
-		std::string errormsg = lua_tostring(L, -1);
-		std::cerr << errormsg << std::endl;
+		printf("%s \n", lua_tostring(L, -1));
 		return false;
 	}
 	return true;
@@ -33,6 +43,7 @@ inline bool CheckLua(lua_State *L, int r)
 
 inline void LoadLuaString(lua_State *L, const char *varName, std::string &str)
 {
+	PROFILE_FUNCTION();
 	lua_getglobal(L, varName);
 	if (lua_isstring(L, -1))
 		str = lua_tostring(L, -1);
@@ -40,6 +51,7 @@ inline void LoadLuaString(lua_State *L, const char *varName, std::string &str)
 
 inline void LoadLuaArray(lua_State *L, const char *varName, std::set<std::string> &arr)
 {
+	PROFILE_FUNCTION();
 	lua_getglobal(L, varName);
 	if (lua_istable(L, -1))
 	{
@@ -47,7 +59,7 @@ inline void LoadLuaArray(lua_State *L, const char *varName, std::set<std::string
 		while (lua_next(L, -2) != 0)
 		{
 			if (lua_isstring(L, -1))
-				arr.insert(lua_tostring(L, -1));
+				arr.emplace(lua_tostring(L, -1));
 			lua_pop(L, 1);
 		}
 	}
@@ -55,6 +67,7 @@ inline void LoadLuaArray(lua_State *L, const char *varName, std::set<std::string
 
 inline void LoadLuaTable(lua_State *L, const char *varName, std::unordered_map<std::string, std::string> &table)
 {
+	PROFILE_FUNCTION();
 	lua_getglobal(L, varName);
 	if (lua_istable(L, -1))
 	{
@@ -62,17 +75,18 @@ inline void LoadLuaTable(lua_State *L, const char *varName, std::unordered_map<s
 		while (lua_next(L, -2) != 0)
 		{
 			if (lua_isstring(L, -1))
-				table.insert({lua_tostring(L, -2), lua_tostring(L, -1)});
+				table.emplace(lua_tostring(L, -2), lua_tostring(L, -1));
 			lua_pop(L, 1);
 		}
 	}
 }
 
-int lua_SendToChat(lua_State* L)
+int lua_SendToChat(lua_State *L)
 {
+	PROFILE_FUNCTION();
 	if (lua_gettop(L) == 2)
 	{
-		TwitchBot* tb = static_cast<TwitchBot*>(lua_touserdata(L, 1));
+		TwitchBot *tb = static_cast<TwitchBot *>(lua_touserdata(L, 1));
 		if (tb->IsConnected())
 			tb->Send("PRIVMSG #" + tb->GetChannelName() + " :" + lua_tostring(L, 2) + "\r\n");
 	}
@@ -84,6 +98,7 @@ int lua_SendToChat(lua_State* L)
 // TwitchBot class definitions
 TwitchBot::TwitchBot()
 {
+	PROFILE_FUNCTION();
 	LoadConfig();
 	Connect("irc.chat.twitch.tv", "6667");
 	std::this_thread::sleep_for(std::chrono::milliseconds(500));
@@ -92,18 +107,21 @@ TwitchBot::TwitchBot()
 
 TwitchBot::~TwitchBot()
 {
+	PROFILE_FUNCTION();
 	Disconnect();
 }
 
 void TwitchBot::Run()
 {
+	PROFILE_FUNCTION();
 	auto &messages = MessagesQueue();
 
 	while (m_IsRunning)
 	{
 		if (messages.size() != 0)
 		{
-			ProcessMessage(messages.pop_back());
+			const auto message = messages.pop_front();
+			ProcessMessage(message.first, message.second);
 			std::this_thread::sleep_for(std::chrono::milliseconds(250));
 		}
 	}
@@ -111,6 +129,7 @@ void TwitchBot::Run()
 
 void TwitchBot::LoadConfig()
 {
+	PROFILE_FUNCTION();
 	lua_State *L = luaL_newstate();
 	luaL_openlibs(L);
 
@@ -130,6 +149,7 @@ void TwitchBot::LoadConfig()
 
 void TwitchBot::LogIn()
 {
+	PROFILE_FUNCTION();
 	if (IsConnected())
 	{
 		Send("PASS oauth:" + m_Oauth + "\r\n");
@@ -138,13 +158,14 @@ void TwitchBot::LogIn()
 	}
 }
 
-void TwitchBot::AddCommand(const CommandType &type, const std::string &msg)
+void TwitchBot::AddCommand(CommandType type, std::string_view msg)
 {
+	PROFILE_FUNCTION();
 	switch (type)
 	{
 	case CommandType::TEXT:
-		if (size_t pos = msg.find(" ", 5); pos != std::string::npos)
-			m_TextCommands.insert({msg.substr(5, pos - 5), msg.substr(pos + 1, msg.size() - pos)});
+		if (size_t pos = msg.find(" ", 5); pos != std::string_view::npos)
+			m_TextCommands.emplace(msg.substr(5, pos - 5), msg.substr(pos + 1, msg.size() - pos));
 		break;
 	case CommandType::VOICE:  // TODO
 	case CommandType::CUSTOM: // TODO
@@ -152,12 +173,13 @@ void TwitchBot::AddCommand(const CommandType &type, const std::string &msg)
 	}
 }
 
-void TwitchBot::RemoveCommand(const CommandType &type, const std::string &msg)
+void TwitchBot::RemoveCommand(CommandType type, std::string_view msg)
 {
+	PROFILE_FUNCTION();
 	switch (type)
 	{
 	case CommandType::TEXT:
-		m_TextCommands.erase(msg.substr(4, msg.size() - 1));
+		m_TextCommands.erase(msg.substr(4, msg.size() - 1).data());
 		break;
 	case CommandType::VOICE:  // TODO
 	case CommandType::CUSTOM: // TODO
@@ -165,62 +187,68 @@ void TwitchBot::RemoveCommand(const CommandType &type, const std::string &msg)
 	}
 }
 
-void TwitchBot::ProcessMessage(const std::pair<std::string, std::string> &msg)
+void TwitchBot::ProcessMessage(std::string_view usr, std::string_view msg)
 {
-	if (msg.first != "")
-		std::cout << msg.first << "\t\t--> " << msg.second << std::endl;
-	if (msg.first == "nightbot")
-		ScriptCommand(msg.first, msg.first);
+	PROFILE_FUNCTION();
+	if (usr != "")
+		std::cout << usr << "\t\t--> " << msg << '\n';
+	if (usr == "nightbot")
+		ScriptCommand(usr, usr);
 
-	if (auto usr = m_Users.find(msg.first); usr != m_Users.end() || m_Users.find("all") != m_Users.end())
+	if (auto usrIt = m_Users.find(msg.data()); usrIt != m_Users.end() || m_Users.find("all") != m_Users.end())
 	{
-		// Checking core !add, !rm and !play commands
-		if ((msg.second).rfind("!add ", 0) == 0)
+		// Checking !add, !rm and !play commands
+		if (msg.rfind("!add ", 0) == 0)
 		{
-			AddCommand(CommandType::TEXT, msg.second);
+			AddCommand(CommandType::TEXT, msg);
 			return;
 		}
-		if ((msg.second).rfind("!rm ", 0) == 0)
+		if (msg.rfind("!rm ", 0) == 0)
 		{
-			RemoveCommand(CommandType::TEXT, msg.second);
+			RemoveCommand(CommandType::TEXT, msg);
 			return;
 		}
-		if ((msg.second).rfind("!play ", 0) == 0)
+		if (msg.rfind("!play ", 0) == 0)
 		{
-			SpeechCommand(msg.second.substr(6, msg.second.size()));
+			SpeechCommand(msg.substr(6, msg.size()));
 			return;
 		}
+		
 		// Checking if command is defined
-		if (auto it = m_TextCommands.find(msg.second); it != m_TextCommands.end())
-			TextCommand(it->second);
-		if (auto it = m_SpeechCommands.find(msg.second); it != m_SpeechCommands.end())
-			SpeechCommand(it->second);
-		if (auto it = m_EmoteCommands.find(msg.second); it != m_EmoteCommands.end())
-			EmoteCommand(msg.first, it->second);
-		if (auto it = m_ScriptCommands.find(msg.second); it != m_ScriptCommands.end())
-			ScriptCommand(it->substr(1, it->size()), msg.first);
+		if (auto cmdIt = m_TextCommands.find(msg.data()); cmdIt != m_TextCommands.end())
+			TextCommand(cmdIt->second);
+		if (auto cmdIt = m_SpeechCommands.find(msg.data()); cmdIt != m_SpeechCommands.end())
+			SpeechCommand(cmdIt->second);
+		if (auto cmdIt = m_EmoteCommands.find(msg.data()); cmdIt != m_EmoteCommands.end())
+			EmoteCommand(usr, cmdIt->second);
+		if (auto cmdIt = m_ScriptCommands.find(msg.data()); cmdIt != m_ScriptCommands.end())
+			ScriptCommand(std::string_view(*cmdIt).substr(1, cmdIt->size()), usr);
 	}
 }
 
 void TwitchBot::TextCommand(std::string_view msg)
 {
+	PROFILE_FUNCTION();
 	if (IsConnected())
 		Send("PRIVMSG #" + m_Channel + " :" + msg.data() + "\r\n");
 }
 
 void TwitchBot::SpeechCommand(std::string_view msg)
 {
+	PROFILE_FUNCTION();
 	TextToSpeech(msg.data());
 }
 
-void TwitchBot::EmoteCommand(std::string_view user, std::string_view msg)
+void TwitchBot::EmoteCommand(std::string_view usr, std::string_view msg)
 {
+	PROFILE_FUNCTION();
 	if (IsConnected())
-		Send("PRIVMSG #" + m_Channel + " :" + user.data() + " " + msg.data() + "\r\n");
+		Send("PRIVMSG #" + m_Channel + " :" + usr.data() + " " + msg.data() + "\r\n");
 }
 
-void TwitchBot::ScriptCommand(std::string_view cmd, std::string_view user)
+void TwitchBot::ScriptCommand(std::string_view cmd, std::string_view usr)
 {
+	PROFILE_FUNCTION();
 	static lua_State *L;
 	static bool bScriptLoaded = false;
 	if (!bScriptLoaded)
@@ -235,17 +263,21 @@ void TwitchBot::ScriptCommand(std::string_view cmd, std::string_view user)
 	if (lua_isfunction(L, -1))
 	{
 		lua_pushlightuserdata(L, this);
-		lua_pushstring(L, user.data());
+		lua_pushstring(L, usr.data());
 		CheckLua(L, lua_pcall(L, 2, 1, 0));
 	}
 }
 
 int main()
 {
-	std::cout << "\nHello streamer! I'm your new bot.\n" << std::endl;
+	//Instrumentor::Get().BeginSession("TwitchBot Profiling");
+
+	std::cout << "\nHello streamer! I'm your new bot.\n\n";
 
 	TwitchBot jaynebot;
 	jaynebot.Run();
+	
+	//Instrumentor::Get().EndSession(); 
 
 	return 0;
 }

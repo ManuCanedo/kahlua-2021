@@ -65,7 +65,7 @@ public:
 	T pop_back()
 	{
 		std::scoped_lock lock(muxQueue);
-		auto t = std::move(deqQueue.front());
+		auto t = std::move(deqQueue.back());
 		deqQueue.pop_back();
 		return t;
 	}

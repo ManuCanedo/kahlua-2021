@@ -27,7 +27,7 @@ public:
 				if (!ec)
 					Read();
 				else
-					std::cerr << "[net_connection][Connect]: " << ec.message() << "\n";
+					std::cerr << "[net_connection][Connect]: " << ec.message() << '\n';
 			}
 		);
 	}
@@ -45,7 +45,7 @@ public:
 
 	void Send(std::string_view msg)
 	{
-		std::cout << ">> " << msg << "\n";
+		std::cout << ">> " << msg << '\n';
 		m_Socket.write_some(asio::buffer(msg.data(), msg.size()));
 	}
 	
@@ -57,13 +57,11 @@ public:
 				if (!ec)
 				{
 					std::string msg(m_Buffer.data(), len);
-					(msg == "PING :tmi.twitch.tv") ? Send("PONG :tmi.twitch.tv") : AddToMessageQueue(msg);
+					(msg.rfind("PING ", 0) == 0) ? Send("PONG :tmi.twitch.tv\r\n") : AddToMessageQueue(msg);
 					Read();
 				}
 				else
-				{
-					std::cerr << "[net_connection]:[Read] " << ec.message() << "\n";
-				}
+					std::cerr << "[net_connection]:[Read] " << ec.message() << '\n';
 			}
 		);
 	}

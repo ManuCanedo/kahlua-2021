@@ -23,14 +23,14 @@ public:
 private:
 	void LogIn();
 
-	void AddCommand(const CommandType& type, const std::string& msg);
-	void RemoveCommand(const CommandType& type, const std::string& msg);
-	void ProcessMessage(const std::pair<std::string,std::string>& msg);
+	void AddCommand(CommandType type, std::string_view msg);
+	void RemoveCommand(CommandType type, std::string_view msg);
+	void ProcessMessage(std::string_view usr, std::string_view msg);
 	
 	void TextCommand(std::string_view msg);
 	void SpeechCommand(std::string_view msg);
-	void EmoteCommand(std::string_view user, std::string_view msg);
-	void ScriptCommand(std::string_view cmd, std::string_view user);
+	void EmoteCommand(std::string_view usr, std::string_view msg);
+	void ScriptCommand(std::string_view cmd, std::string_view usr);
 
 private:
 	std::string m_Oauth, m_Botname, m_Channel;
@@ -42,6 +42,5 @@ private:
 
 	bool m_IsRunning = true;
 };
-
 
 #endif // TWITCH_BOT_H
