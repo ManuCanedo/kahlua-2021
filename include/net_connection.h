@@ -16,11 +16,10 @@ public:
 		: m_Context(context), m_Socket(std::move(socket)), m_Messages(messages),
 		m_Buffer(BUFFER_SIZE) {}
 
-	virtual ~connection() = default;
-
 public:
 	void Connect(asio::ip::tcp::resolver::results_type& endpoints)
 	{
+		PROFILE_FUNCTION();
 		asio::async_connect(m_Socket, endpoints,
 			[this](std::error_code ec, asio::ip::tcp::endpoint endpoints)
 			{
@@ -34,6 +33,7 @@ public:
 
 	void Disconnect()
 	{
+		PROFILE_FUNCTION();
 		if (IsConnected()) 
 			asio::post(m_Context, [this](){ m_Socket.close(); });
 	}
@@ -45,12 +45,14 @@ public:
 
 	void Send(std::string_view msg)
 	{
+		PROFILE_FUNCTION();
 		std::cout << ">> " << msg << '\n';
 		m_Socket.write_some(asio::buffer(msg.data(), msg.size()));
 	}
 	
 	void Read()
 	{
+		PROFILE_FUNCTION();
 		m_Socket.async_read_some(asio::buffer(m_Buffer.data(), m_Buffer.size()),
 			[&](std::error_code ec, std::size_t len)
 			{
@@ -68,6 +70,7 @@ public:
 
 	void AddToMessageQueue(const std::string& msg)
 	{
+		PROFILE_FUNCTION();
 		std::smatch match;
 		std::regex_search(msg, match, m_Regex);
 		m_Messages.push_back(std::make_pair<std::string, std::string>(match[1],match[3]));

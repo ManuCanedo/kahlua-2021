@@ -11,21 +11,21 @@ namespace net
 class client_interface
 {
 public:
-	client_interface() = default;
-
 	~client_interface()
 	{
+		PROFILE_FUNCTION();
 		Disconnect();
 	}
 
 public:
-	bool IsConnected()
+	bool IsConnected() const
 	{
 		return (m_Connection) ? m_Connection->IsConnected() : false;
 	}
 
 	bool Connect(std::string_view host, std::string_view port)
 	{
+		PROFILE_FUNCTION();
 		try
 		{
 			asio::ip::tcp::resolver resolver(m_Context);
@@ -44,6 +44,7 @@ public:
 
 	void Disconnect()
 	{
+		PROFILE_FUNCTION();
 		if (IsConnected()) 
 			m_Connection->Disconnect();
 		m_Context.stop();
@@ -52,8 +53,9 @@ public:
 		m_Connection.release();
 	}
 
-	void Send(std::string_view msg)
+	void Send(std::string_view msg) const
 	{
+		PROFILE_FUNCTION();
 		if (IsConnected())
 			m_Connection->Send(msg);
 	}

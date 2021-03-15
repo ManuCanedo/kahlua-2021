@@ -1,3 +1,16 @@
+#define PROFILING 0
+#if PROFILING
+#define START_PROFILER() Instrumentor::Get().BeginSession("TwitchBot Profiling")
+#define STOP_PROFILER() Instrumentor::Get().EndSession()
+#define PROFILE_SCOPE(name) InstrumentationTimer timer##__LINE__(name)
+#define PROFILE_FUNCTION() PROFILE_SCOPE(__FUNCTION__)
+#else
+#define START_PROFILER() 
+#define STOP_PROFILER() 
+#define PROFILE_SCOPE(name) 
+#define PROFILE_FUNCTION() 
+#endif
+
 #include "TwitchBot.h"
 
 extern "C"
@@ -8,14 +21,13 @@ extern "C"
 #include "flite.h"
 }
 
-#define PROFILING 0
-#if PROFILING
-#define PROFILE_SCOPE(name) InstrumentationTimer timer##__LINE__(name)
-#define PROFILE_FUNCTION() PROFILE_SCOPE(__FUNCTION__)
-#else
-#define PROFILE_SCOPE(name) 
-#define PROFILE_FUNCTION() 
-#endif
+// CTRL+C Catcher
+void signal_callback_handler(int signum) 
+{
+   std::cout << " Caught signal " << signum << ". Exiting." << std::endl;
+   Instrumentor::Get().EndSession();
+   exit(signum);
+}
 
 // FLITE functions
 extern "C" cst_voice *register_cmu_us_kal();
@@ -127,6 +139,12 @@ void TwitchBot::Run()
 	}
 }
 
+void TwitchBot::Stop()
+{
+	PROFILE_FUNCTION();
+	m_IsRunning = false;
+}
+
 void TwitchBot::LoadConfig()
 {
 	PROFILE_FUNCTION();
@@ -226,20 +244,20 @@ void TwitchBot::ProcessMessage(std::string_view usr, std::string_view msg)
 	}
 }
 
-void TwitchBot::TextCommand(std::string_view msg)
+void TwitchBot::TextCommand(std::string_view msg) const
 {
 	PROFILE_FUNCTION();
 	if (IsConnected())
 		Send("PRIVMSG #" + m_Channel + " :" + msg.data() + "\r\n");
 }
 
-void TwitchBot::SpeechCommand(std::string_view msg)
+void TwitchBot::SpeechCommand(std::string_view msg) const
 {
 	PROFILE_FUNCTION();
 	TextToSpeech(msg.data());
 }
 
-void TwitchBot::EmoteCommand(std::string_view usr, std::string_view msg)
+void TwitchBot::EmoteCommand(std::string_view usr, std::string_view msg) const
 {
 	PROFILE_FUNCTION();
 	if (IsConnected())
@@ -270,14 +288,12 @@ void TwitchBot::ScriptCommand(std::string_view cmd, std::string_view usr)
 
 int main()
 {
-	//Instrumentor::Get().BeginSession("TwitchBot Profiling");
-
+	START_PROFILER();
+	signal(SIGINT, signal_callback_handler);
 	std::cout << "\nHello streamer! I'm your new bot.\n\n";
-
 	TwitchBot jaynebot;
 	jaynebot.Run();
-	
-	//Instrumentor::Get().EndSession(); 
+	STOP_PROFILER();
 
 	return 0;
 }

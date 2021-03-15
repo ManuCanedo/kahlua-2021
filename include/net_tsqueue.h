@@ -18,7 +18,7 @@ public:
 	}
 
 public:
-	const T& front()
+	const T& front() const
 	{
 		std::scoped_lock lock(muxQueue);
 		return deqQueue.front();

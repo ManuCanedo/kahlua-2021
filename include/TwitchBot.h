@@ -17,8 +17,9 @@ public:
 
 	void LoadConfig();
 	void Run();
+	void Stop();
 
-	const std::string& GetChannelName() const { return m_Channel; } 
+	const std::string& GetChannelName() const { return m_Channel; }
 
 private:
 	void LogIn();
@@ -27,9 +28,9 @@ private:
 	void RemoveCommand(CommandType type, std::string_view msg);
 	void ProcessMessage(std::string_view usr, std::string_view msg);
 	
-	void TextCommand(std::string_view msg);
-	void SpeechCommand(std::string_view msg);
-	void EmoteCommand(std::string_view usr, std::string_view msg);
+	void TextCommand(std::string_view msg) const;
+	void SpeechCommand(std::string_view msg) const;
+	void EmoteCommand(std::string_view usr, std::string_view msg) const;
 	void ScriptCommand(std::string_view cmd, std::string_view usr);
 
 private:
