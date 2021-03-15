@@ -24,9 +24,10 @@ extern "C"
 // CTRL+C Catcher
 void signal_callback_handler(int signum) 
 {
-   std::cout << " Caught signal " << signum << ". Exiting." << std::endl;
-   Instrumentor::Get().EndSession();
-   exit(signum);
+	STOP_PROFILER();
+	std::cout << " Caught signal " << signum << ". Exiting." << std::endl;
+	std::this_thread::sleep_for(std::chrono::milliseconds(500));
+	exit(signum);
 }
 
 // FLITE functions
@@ -100,7 +101,7 @@ int lua_SendToChat(lua_State *L)
 	{
 		TwitchBot *tb = static_cast<TwitchBot *>(lua_touserdata(L, 1));
 		if (tb->IsConnected())
-			tb->Send("PRIVMSG #" + tb->GetChannelName() + " :" + lua_tostring(L, 2) + "\r\n");
+			tb->Send("PRIVMSG #" + tb->ChannelName() + " :" + lua_tostring(L, 2) + "\r\n");
 	}
 	else
 		std::cerr << "[Global]:[lua_SendToChat] invalid number of args returned from lua.\n";
@@ -117,18 +118,12 @@ TwitchBot::TwitchBot()
 	LogIn();
 }
 
-TwitchBot::~TwitchBot()
-{
-	PROFILE_FUNCTION();
-	Disconnect();
-}
-
 void TwitchBot::Run()
 {
 	PROFILE_FUNCTION();
 	auto &messages = MessagesQueue();
 
-	while (m_IsRunning)
+	while (true)
 	{
 		if (messages.size() != 0)
 		{
@@ -137,12 +132,6 @@ void TwitchBot::Run()
 			std::this_thread::sleep_for(std::chrono::milliseconds(250));
 		}
 	}
-}
-
-void TwitchBot::Stop()
-{
-	PROFILE_FUNCTION();
-	m_IsRunning = false;
 }
 
 void TwitchBot::LoadConfig()
@@ -288,11 +277,11 @@ void TwitchBot::ScriptCommand(std::string_view cmd, std::string_view usr)
 
 int main()
 {
-	START_PROFILER();
 	signal(SIGINT, signal_callback_handler);
 	std::cout << "\nHello streamer! I'm your new bot.\n\n";
-	TwitchBot jaynebot;
-	jaynebot.Run();
+	
+	START_PROFILER();
+	TwitchBot::Start();
 	STOP_PROFILER();
 
 	return 0;

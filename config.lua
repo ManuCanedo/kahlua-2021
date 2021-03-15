@@ -1,5 +1,5 @@
 -- Twitch Connection params
-_channel = "torene33"
+_channel = "emongg"
 _oauth = "u8pf2yy60tckz4enope5555474tzmu"
 _botname = "coachme_bot"
 

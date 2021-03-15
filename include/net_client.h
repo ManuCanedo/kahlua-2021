@@ -11,7 +11,7 @@ namespace net
 class client_interface
 {
 public:
-	~client_interface()
+	virtual ~client_interface()
 	{
 		PROFILE_FUNCTION();
 		Disconnect();
