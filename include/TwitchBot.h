@@ -12,8 +12,6 @@ class TwitchBot : public net::client_interface
 	enum class CommandType { TEXT, VOICE, CUSTOM };
 
 public:
-	~TwitchBot() = default;
-
 	static void Start() { Get().Run(); }
 	static TwitchBot& Get() { static TwitchBot instance; return instance; }
 	static const std::string& ChannelName() { return Get().m_Channel; }
@@ -24,9 +22,9 @@ private:
 	void LogIn();
 	void Run();
 
+	void ProcessMessage(const std::string& usr, const std::string& msg);
 	void AddCommand(CommandType type, std::string_view msg);
 	void RemoveCommand(CommandType type, std::string_view msg);
-	void ProcessMessage(std::string_view usr, std::string_view msg);
 	
 	void TextCommand(std::string_view msg) const;
 	void SpeechCommand(std::string_view msg) const;
@@ -40,6 +38,8 @@ private:
 	std::unordered_map<std::string, std::string> m_TextCommands;
 	std::unordered_map<std::string, std::string> m_SpeechCommands;
 	std::unordered_map<std::string, std::string> m_EmoteCommands;
+
+	bool m_bRunning = true;
 };
 
 #endif // TWITCH_BOT_H

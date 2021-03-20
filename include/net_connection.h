@@ -13,10 +13,8 @@ class connection
 {
 public:
 	connection(asio::io_context& context, asio::ip::tcp::socket socket, tsqueue<std::pair<std::string,std::string>>& messages)
-		: m_Context(context), m_Socket(std::move(socket)), m_Messages(messages),
-		m_Buffer(BUFFER_SIZE) {}
+		: m_Context(context), m_Socket(std::move(socket)), m_Messages(messages), m_Buffer(BUFFER_SIZE) {}
 
-public:
 	void Connect(asio::ip::tcp::resolver::results_type& endpoints)
 	{
 		PROFILE_FUNCTION();
@@ -73,7 +71,7 @@ public:
 		PROFILE_FUNCTION();
 		std::smatch match;
 		std::regex_search(msg, match, m_Regex);
-		m_Messages.push_back(std::make_pair<std::string, std::string>(match[1],match[3]));
+		m_Messages.push_back(std::make_pair<std::string, std::string>(std::move(match[1]),std::move(match[3])));
 	}
 
 protected:
@@ -83,7 +81,7 @@ protected:
 	std::vector<char> m_Buffer;
 
 private:
-	std::regex m_Regex {"!(.+)@.+ PRIVMSG #([^\\s]+) :(.*)"};
+	const std::regex m_Regex {"!(.+)@.+ PRIVMSG #([^\\s]+) :(.*)"};
 };
 }
 

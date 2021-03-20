@@ -11,11 +11,8 @@ class tsqueue
 public:
 	tsqueue() = default;
 	tsqueue(const tsqueue&) = delete;
-	
-	~tsqueue() 
-	{
-		clear();
-	}
+	tsqueue(tsqueue&&) = default;
+	~tsqueue() { clear(); }
 
 public:
 	const T& front() const
@@ -36,10 +33,22 @@ public:
 		deqQueue.push_front(item);
 	}
 
+	void push_front(T&& item) noexcept
+	{
+		std::scoped_lock lock(muxQueue);
+		deqQueue.push_front(std::move(item));
+	}
+
 	void push_back(const T& item)
 	{
 		std::scoped_lock lock(muxQueue);
 		deqQueue.push_back(item);
+	}
+
+	void push_back(T&& item) noexcept
+	{
+		std::scoped_lock lock(muxQueue);
+		deqQueue.push_back(std::move(item));
 	}
 
 	size_t size()

@@ -26,7 +26,6 @@ void signal_callback_handler(int signum)
 {
 	STOP_PROFILER();
 	std::cout << " Caught signal " << signum << ". Exiting." << std::endl;
-	std::this_thread::sleep_for(std::chrono::milliseconds(500));
 	exit(signum);
 }
 
@@ -123,7 +122,7 @@ void TwitchBot::Run()
 	PROFILE_FUNCTION();
 	auto &messages = MessagesQueue();
 
-	while (true)
+	while (m_bRunning)
 	{
 		if (messages.size() != 0)
 		{
@@ -194,7 +193,7 @@ void TwitchBot::RemoveCommand(CommandType type, std::string_view msg)
 	}
 }
 
-void TwitchBot::ProcessMessage(std::string_view usr, std::string_view msg)
+void TwitchBot::ProcessMessage(const std::string& usr, const std::string& msg)
 {
 	PROFILE_FUNCTION();
 	if (usr != "")
@@ -202,7 +201,7 @@ void TwitchBot::ProcessMessage(std::string_view usr, std::string_view msg)
 	if (usr == "nightbot")
 		ScriptCommand(usr, usr);
 
-	if (auto usrIt = m_Users.find(msg.data()); usrIt != m_Users.end() || m_Users.find("all") != m_Users.end())
+	if (auto usrIt = m_Users.find(msg); usrIt != m_Users.end() || m_Users.find("all") != m_Users.end())
 	{
 		// Checking !add, !rm and !play commands
 		if (msg.rfind("!add ", 0) == 0)
@@ -217,18 +216,18 @@ void TwitchBot::ProcessMessage(std::string_view usr, std::string_view msg)
 		}
 		if (msg.rfind("!play ", 0) == 0)
 		{
-			SpeechCommand(msg.substr(6, msg.size()));
+			SpeechCommand(std::string_view(msg).substr(6, msg.size()));
 			return;
 		}
 		
 		// Checking if command is defined
-		if (auto cmdIt = m_TextCommands.find(msg.data()); cmdIt != m_TextCommands.end())
+		if (auto cmdIt = m_TextCommands.find(msg); cmdIt != m_TextCommands.end())
 			TextCommand(cmdIt->second);
-		if (auto cmdIt = m_SpeechCommands.find(msg.data()); cmdIt != m_SpeechCommands.end())
+		if (auto cmdIt = m_SpeechCommands.find(msg); cmdIt != m_SpeechCommands.end())
 			SpeechCommand(cmdIt->second);
-		if (auto cmdIt = m_EmoteCommands.find(msg.data()); cmdIt != m_EmoteCommands.end())
+		if (auto cmdIt = m_EmoteCommands.find(msg); cmdIt != m_EmoteCommands.end())
 			EmoteCommand(usr, cmdIt->second);
-		if (auto cmdIt = m_ScriptCommands.find(msg.data()); cmdIt != m_ScriptCommands.end())
+		if (auto cmdIt = m_ScriptCommands.find(msg); cmdIt != m_ScriptCommands.end())
 			ScriptCommand(std::string_view(*cmdIt).substr(1, cmdIt->size()), usr);
 	}
 }

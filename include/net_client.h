@@ -11,13 +11,17 @@ namespace net
 class client_interface
 {
 public:
+	client_interface() = default;
+	
 	virtual ~client_interface()
 	{
 		PROFILE_FUNCTION();
 		Disconnect();
 	}
 
-public:
+	client_interface(client_interface&& other) = default;
+	client_interface& operator=(client_interface&& other) = default;
+
 	bool IsConnected() const
 	{
 		return (m_Connection) ? m_Connection->IsConnected() : false;
