@@ -1,82 +1,78 @@
 #ifndef NET_CLIENT_H
 #define NET_CLIENT_H
 
-
 #include "net_common.h"
 #include "net_connection.h"
 #include "net_tsqueue.h"
 
 namespace net
 {
-class client_interface
+class ClientInterface
 {
 public:
-	client_interface() = default;
-	
-	virtual ~client_interface()
+	ClientInterface() = default;
+
+	virtual ~ClientInterface()
 	{
-		PROFILE_FUNCTION();
-		Disconnect();
+		disconnect();
 	}
 
-	client_interface(client_interface&& other) = default;
-	client_interface& operator=(client_interface&& other) = default;
+	ClientInterface(const ClientInterface &) = delete;
+	ClientInterface(ClientInterface &&) = delete;
+	ClientInterface &operator=(const ClientInterface &) = delete;
+	ClientInterface &operator=(ClientInterface &&) = delete;
 
-	bool IsConnected() const
+	[[nodiscard]] bool is_connected() const
 	{
-		return (m_Connection) ? m_Connection->IsConnected() : false;
+		return (connection) ? connection->is_connected() : false;
 	}
 
-	bool Connect(std::string_view host, std::string_view port)
+	bool connect(std::string_view host, std::string_view port)
 	{
-		PROFILE_FUNCTION();
 		try
 		{
-			asio::ip::tcp::resolver resolver(m_Context);
+			asio::ip::tcp::resolver resolver(context);
 			asio::ip::tcp::resolver::results_type endpoints = resolver.resolve(host, port);
-			m_Connection = std::make_unique<connection>(m_Context, asio::ip::tcp::socket(m_Context), m_Messages);
-			m_Connection->Connect(endpoints);
-			m_Thread = std::thread([this](){ m_Context.run(); });
+			connection = std::make_unique<Connection>(context, asio::ip::tcp::socket(context), messages);
+			connection->connect(endpoints);
+			thread = std::thread([this]() { context.run(); });
 		}
-		catch (std::exception& e)
+		catch (std::exception &e)
 		{
-			std::cerr << "[net_client]:[Connect] " << e.what() << '\n';
+			std::cerr << "[net_client]:[connect] " << e.what() << '\n';
 			return false;
 		}
 		return true;
 	}
 
-	void Disconnect()
+	void disconnect()
 	{
-		PROFILE_FUNCTION();
-		if (IsConnected()) 
-			m_Connection->Disconnect();
-		m_Context.stop();
-		if (m_Thread.joinable()) 
-			m_Thread.join();
-		m_Connection.release();
+		if (is_connected())
+			connection->disconnect();
+		context.stop();
+		if (thread.joinable())
+			thread.join();
+		connection.release();
 	}
 
-	void Send(std::string_view msg) const
+	void send(std::string_view msg) const
 	{
-		PROFILE_FUNCTION();
-		if (IsConnected())
-			m_Connection->Send(msg);
-	}
-
-protected:
-	auto& MessagesQueue()
-	{
-		return m_Messages;
+		if (is_connected())
+			connection->send(msg);
 	}
 
 protected:
-	asio::io_context m_Context;
-	std::thread m_Thread;
-	std::unique_ptr<connection> m_Connection;
-	tsqueue<std::pair<std::string,std::string>> m_Messages;
+	[[nodiscard]] auto &messages_queue()
+	{
+		return messages;
+	}
+
+protected:
+	asio::io_context context{};
+	std::thread thread{};
+	std::unique_ptr<Connection> connection{};
+	ThreadSafeQueue<std::pair<std::string, std::string>> messages{};
 };
 }
-
 
 #endif // NET_CLIENT_H
