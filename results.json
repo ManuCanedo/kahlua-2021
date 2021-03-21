@@ -85,7 +85,7 @@
 		{
 			"cat": "function",
 			"dur": 368,
-			"name": "LoadConfig",
+			"name": "load",
 			"ph": "X",
 			"pid": 0,
 			"tid": 347617705,
@@ -94,7 +94,7 @@
 		{
 			"cat": "function",
 			"dur": 42,
-			"name": "Connect",
+			"name": "connect",
 			"ph": "X",
 			"pid": 0,
 			"tid": 347617705,
@@ -103,7 +103,7 @@
 		{
 			"cat": "function",
 			"dur": 25257,
-			"name": "Connect",
+			"name": "connect",
 			"ph": "X",
 			"pid": 0,
 			"tid": 347617705,
@@ -112,7 +112,7 @@
 		{
 			"cat": "function",
 			"dur": 3,
-			"name": "Read",
+			"name": "read",
 			"ph": "X",
 			"pid": 0,
 			"tid": 2699045901,
@@ -121,7 +121,7 @@
 		{
 			"cat": "function",
 			"dur": 43,
-			"name": "Send",
+			"name": "send",
 			"ph": "X",
 			"pid": 0,
 			"tid": 347617705,
@@ -130,7 +130,7 @@
 		{
 			"cat": "function",
 			"dur": 76,
-			"name": "Send",
+			"name": "send",
 			"ph": "X",
 			"pid": 0,
 			"tid": 347617705,
@@ -139,7 +139,7 @@
 		{
 			"cat": "function",
 			"dur": 10,
-			"name": "Send",
+			"name": "send",
 			"ph": "X",
 			"pid": 0,
 			"tid": 347617705,
@@ -148,7 +148,7 @@
 		{
 			"cat": "function",
 			"dur": 18,
-			"name": "Send",
+			"name": "send",
 			"ph": "X",
 			"pid": 0,
 			"tid": 347617705,
@@ -157,7 +157,7 @@
 		{
 			"cat": "function",
 			"dur": 7,
-			"name": "Send",
+			"name": "send",
 			"ph": "X",
 			"pid": 0,
 			"tid": 347617705,
@@ -166,7 +166,7 @@
 		{
 			"cat": "function",
 			"dur": 14,
-			"name": "Send",
+			"name": "send",
 			"ph": "X",
 			"pid": 0,
 			"tid": 347617705,
@@ -175,7 +175,7 @@
 		{
 			"cat": "function",
 			"dur": 138,
-			"name": "LogIn",
+			"name": "login",
 			"ph": "X",
 			"pid": 0,
 			"tid": 347617705,
@@ -193,7 +193,7 @@
 		{
 			"cat": "function",
 			"dur": 90,
-			"name": "AddToMessageQueue",
+			"name": "add_to_queue",
 			"ph": "X",
 			"pid": 0,
 			"tid": 2699045901,
@@ -202,7 +202,7 @@
 		{
 			"cat": "function",
 			"dur": 90,
-			"name": "AddToMessageQueue",
+			"name": "add_to_queue",
 			"ph": "X",
 			"pid": 0,
 			"tid": 2699045901,
@@ -211,7 +211,7 @@
 		{
 			"cat": "function",
 			"dur": 4,
-			"name": "ProcessMessage",
+			"name": "process_message",
 			"ph": "X",
 			"pid": 0,
 			"tid": 347617705,
@@ -220,7 +220,7 @@
 		{
 			"cat": "function",
 			"dur": 3,
-			"name": "Read",
+			"name": "read",
 			"ph": "X",
 			"pid": 0,
 			"tid": 2699045901,
@@ -229,7 +229,7 @@
 		{
 			"cat": "function",
 			"dur": 324,
-			"name": "AddToMessageQueue",
+			"name": "add_to_queue",
 			"ph": "X",
 			"pid": 0,
 			"tid": 2699045901,
@@ -238,7 +238,7 @@
 		{
 			"cat": "function",
 			"dur": 11,
-			"name": "Read",
+			"name": "read",
 			"ph": "X",
 			"pid": 0,
 			"tid": 2699045901,
@@ -247,7 +247,7 @@
 		{
 			"cat": "function",
 			"dur": 14,
-			"name": "ProcessMessage",
+			"name": "process_message",
 			"ph": "X",
 			"pid": 0,
 			"tid": 347617705,
@@ -256,7 +256,7 @@
 		{
 			"cat": "function",
 			"dur": 45,
-			"name": "AddToMessageQueue",
+			"name": "add_to_queue",
 			"ph": "X",
 			"pid": 0,
 			"tid": 2699045901,
@@ -265,7 +265,7 @@
 		{
 			"cat": "function",
 			"dur": 5,
-			"name": "Read",
+			"name": "read",
 			"ph": "X",
 			"pid": 0,
 			"tid": 2699045901,
@@ -292,7 +292,7 @@
 		{
 			"cat": "function",
 			"dur": 2037484,
-			"name": "ProcessMessage",
+			"name": "process_message",
 			"ph": "X",
 			"pid": 0,
 			"tid": 347617705,
@@ -301,7 +301,7 @@
 		{
 			"cat": "function",
 			"dur": 44,
-			"name": "AddToMessageQueue",
+			"name": "add_to_queue",
 			"ph": "X",
 			"pid": 0,
 			"tid": 2699045901,
@@ -310,7 +310,7 @@
 		{
 			"cat": "function",
 			"dur": 36,
-			"name": "Send",
+			"name": "send",
 			"ph": "X",
 			"pid": 0,
 			"tid": 347617705,
@@ -319,7 +319,7 @@
 		{
 			"cat": "function",
 			"dur": 46,
-			"name": "Send",
+			"name": "send",
 			"ph": "X",
 			"pid": 0,
 			"tid": 347617705,
@@ -328,7 +328,7 @@
 		{
 			"cat": "function",
 			"dur": 35,
-			"name": "Read",
+			"name": "read",
 			"ph": "X",
 			"pid": 0,
 			"tid": 2699045901,
@@ -337,7 +337,7 @@
 		{
 			"cat": "function",
 			"dur": 46,
-			"name": "Send",
+			"name": "send",
 			"ph": "X",
 			"pid": 0,
 			"tid": 347617705,
@@ -355,7 +355,7 @@
 		{
 			"cat": "function",
 			"dur": 75,
-			"name": "ProcessMessage",
+			"name": "process_message",
 			"ph": "X",
 			"pid": 0,
 			"tid": 347617705,
@@ -364,7 +364,7 @@
 		{
 			"cat": "function",
 			"dur": 76,
-			"name": "AddToMessageQueue",
+			"name": "add_to_queue",
 			"ph": "X",
 			"pid": 0,
 			"tid": 2699045901,
@@ -373,7 +373,7 @@
 		{
 			"cat": "function",
 			"dur": 76,
-			"name": "AddToMessageQueue",
+			"name": "add_to_queue",
 			"ph": "X",
 			"pid": 0,
 			"tid": 2699045901,
@@ -382,7 +382,7 @@
 		{
 			"cat": "function",
 			"dur": 18,
-			"name": "ProcessMessage",
+			"name": "process_message",
 			"ph": "X",
 			"pid": 0,
 			"tid": 347617705,
@@ -391,7 +391,7 @@
 		{
 			"cat": "function",
 			"dur": 46,
-			"name": "AddToMessageQueue",
+			"name": "add_to_queue",
 			"ph": "X",
 			"pid": 0,
 			"tid": 2699045901,
@@ -400,7 +400,7 @@
 		{
 			"cat": "function",
 			"dur": 46,
-			"name": "AddToMessageQueue",
+			"name": "add_to_queue",
 			"ph": "X",
 			"pid": 0,
 			"tid": 2699045901,
@@ -409,7 +409,7 @@
 		{
 			"cat": "function",
 			"dur": 18,
-			"name": "ProcessMessage",
+			"name": "process_message",
 			"ph": "X",
 			"pid": 0,
 			"tid": 347617705,
@@ -418,7 +418,7 @@
 		{
 			"cat": "function",
 			"dur": 62,
-			"name": "AddToMessageQueue",
+			"name": "add_to_queue",
 			"ph": "X",
 			"pid": 0,
 			"tid": 2699045901,
@@ -427,7 +427,7 @@
 		{
 			"cat": "function",
 			"dur": 62,
-			"name": "AddToMessageQueue",
+			"name": "add_to_queue",
 			"ph": "X",
 			"pid": 0,
 			"tid": 2699045901,
@@ -436,7 +436,7 @@
 		{
 			"cat": "function",
 			"dur": 43,
-			"name": "ProcessMessage",
+			"name": "process_message",
 			"ph": "X",
 			"pid": 0,
 			"tid": 347617705,
@@ -445,7 +445,7 @@
 		{
 			"cat": "function",
 			"dur": 5,
-			"name": "Read",
+			"name": "read",
 			"ph": "X",
 			"pid": 0,
 			"tid": 2699045901,
@@ -454,7 +454,7 @@
 		{
 			"cat": "function",
 			"dur": 31,
-			"name": "AddToMessageQueue",
+			"name": "add_to_queue",
 			"ph": "X",
 			"pid": 0,
 			"tid": 2699045901,
@@ -463,7 +463,7 @@
 		{
 			"cat": "function",
 			"dur": 2,
-			"name": "Read",
+			"name": "read",
 			"ph": "X",
 			"pid": 0,
 			"tid": 2699045901,
@@ -472,7 +472,7 @@
 		{
 			"cat": "function",
 			"dur": 13,
-			"name": "Send",
+			"name": "send",
 			"ph": "X",
 			"pid": 0,
 			"tid": 347617705,
@@ -481,7 +481,7 @@
 		{
 			"cat": "function",
 			"dur": 22,
-			"name": "Send",
+			"name": "send",
 			"ph": "X",
 			"pid": 0,
 			"tid": 347617705,
@@ -499,7 +499,7 @@
 		{
 			"cat": "function",
 			"dur": 44,
-			"name": "ProcessMessage",
+			"name": "process_message",
 			"ph": "X",
 			"pid": 0,
 			"tid": 347617705,
@@ -508,7 +508,7 @@
 		{
 			"cat": "function",
 			"dur": 90,
-			"name": "AddToMessageQueue",
+			"name": "add_to_queue",
 			"ph": "X",
 			"pid": 0,
 			"tid": 2699045901,
@@ -517,7 +517,7 @@
 		{
 			"cat": "function",
 			"dur": 90,
-			"name": "AddToMessageQueue",
+			"name": "add_to_queue",
 			"ph": "X",
 			"pid": 0,
 			"tid": 2699045901,
@@ -526,7 +526,7 @@
 		{
 			"cat": "function",
 			"dur": 16,
-			"name": "ProcessMessage",
+			"name": "process_message",
 			"ph": "X",
 			"pid": 0,
 			"tid": 347617705,
@@ -535,7 +535,7 @@
 		{
 			"cat": "function",
 			"dur": 3,
-			"name": "Read",
+			"name": "read",
 			"ph": "X",
 			"pid": 0,
 			"tid": 2699045901,
@@ -544,7 +544,7 @@
 		{
 			"cat": "function",
 			"dur": 35,
-			"name": "AddToMessageQueue",
+			"name": "add_to_queue",
 			"ph": "X",
 			"pid": 0,
 			"tid": 2699045901,
@@ -553,7 +553,7 @@
 		{
 			"cat": "function",
 			"dur": 4,
-			"name": "Read",
+			"name": "read",
 			"ph": "X",
 			"pid": 0,
 			"tid": 2699045901,
@@ -571,7 +571,7 @@
 		{
 			"cat": "function",
 			"dur": 29,
-			"name": "Send",
+			"name": "send",
 			"ph": "X",
 			"pid": 0,
 			"tid": 347617705,
@@ -580,7 +580,7 @@
 		{
 			"cat": "function",
 			"dur": 53,
-			"name": "Send",
+			"name": "send",
 			"ph": "X",
 			"pid": 0,
 			"tid": 347617705,
@@ -589,7 +589,7 @@
 		{
 			"cat": "function",
 			"dur": 58,
-			"name": "lua_SendToChat",
+			"name": "lua_send",
 			"ph": "X",
 			"pid": 0,
 			"tid": 347617705,
@@ -616,7 +616,7 @@
 		{
 			"cat": "function",
 			"dur": 436,
-			"name": "ProcessMessage",
+			"name": "process_message",
 			"ph": "X",
 			"pid": 0,
 			"tid": 347617705,
