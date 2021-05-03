@@ -6,21 +6,21 @@
 namespace net
 {
 template <typename T> class ThreadSafeQueue {
-    public:
+public:
 	ThreadSafeQueue() = default;
 
 	~ThreadSafeQueue()
 	{
 		clear();
 	}
-	
+
 	ThreadSafeQueue(ThreadSafeQueue&&) = default;
 	ThreadSafeQueue& operator=(ThreadSafeQueue&&) = default;
 
 	ThreadSafeQueue(const ThreadSafeQueue&) = delete;
 	ThreadSafeQueue& operator=(const ThreadSafeQueue&) = delete;
 
-    public:
+public:
 	[[nodiscard]] const T& front() const
 	{
 		std::scoped_lock lock(mux);
@@ -85,7 +85,7 @@ template <typename T> class ThreadSafeQueue {
 		return t;
 	}
 
-    protected:
+protected:
 	std::mutex mux{};
 	std::deque<T> deque{};
 };

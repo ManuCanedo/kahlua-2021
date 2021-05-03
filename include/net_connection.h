@@ -9,7 +9,7 @@ namespace net
 constexpr size_t buffer_size = 20 * 1024;
 
 class Connection {
-    public:
+public:
 	Connection(asio::io_context& context, asio::ip::tcp::socket socket,
 		   ThreadSafeQueue<std::pair<std::string, std::string> >& messages)
 		: context(context), socket(std::move(socket)), messages_queue(messages),
@@ -56,7 +56,8 @@ class Connection {
 					       if (!ec) {
 						       //std::string msg(buffer.data(), len); // Uses one unnecessary string allocation
 						       //(msg.rfind("PING ", 0) == 0) ?
-						       (strcmp(buffer.data(), "PING :tmi.twitch.tv") == 0) ?
+						       (strcmp(buffer.data(),
+							       "PING :tmi.twitch.tv") == 0) ?
 								     send("PONG :tmi.twitch.tv\r\n") :
 								     add_to_queue(msg);
 						       read();
@@ -75,13 +76,13 @@ class Connection {
 			std::move(match[1]), std::move(match[3])));
 	}
 
-    protected:
+protected:
 	asio::io_context& context;
 	asio::ip::tcp::socket socket;
 	ThreadSafeQueue<std::pair<std::string, std::string> >& messages_queue;
 	std::vector<char> buffer;
 
-    private:
+private:
 	const std::regex regex{ "!(.+)@.+ PRIVMSG #([^\\s]+) :(.*)" };
 };
 } // namespace net

@@ -7,10 +7,10 @@
 #include "net_tsqueue.h"
 
 class TwitchBot : public net::ClientInterface {
-    public:
+public:
 	enum class CommandType { TEXT, VOICE, CUSTOM };
 
-    public:
+public:
 	static void start()
 	{
 		Get().run();
@@ -21,13 +21,13 @@ class TwitchBot : public net::ClientInterface {
 		static TwitchBot instance;
 		return instance;
 	}
-	
+
 	[[nodiscard]] static const std::string& channel_name()
 	{
 		return Get().channel;
 	}
 
-    private:
+private:
 	TwitchBot();
 	void load();
 	void login() const;
@@ -35,7 +35,7 @@ class TwitchBot : public net::ClientInterface {
 
 	void process_message(const std::string& usr, const std::string& msg);
 
-    private:
+private:
 	std::string oauth{};
 	std::string botname{};
 	std::string channel{};

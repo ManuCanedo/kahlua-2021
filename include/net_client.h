@@ -8,7 +8,7 @@
 namespace net
 {
 class ClientInterface {
-    public:
+public:
 	ClientInterface() = default;
 
 	virtual ~ClientInterface()
@@ -58,13 +58,13 @@ class ClientInterface {
 			connection->send(msg);
 	}
 
-    protected:
+protected:
 	[[nodiscard]] auto& messages_queue()
 	{
 		return messages;
 	}
 
-    protected:
+protected:
 	asio::io_context context{};
 	std::thread thread{};
 	std::unique_ptr<Connection> connection{};
