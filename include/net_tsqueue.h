@@ -5,50 +5,53 @@
 
 namespace net
 {
-template <typename T>
-class ThreadSafeQueue
-{
-public:
+template <typename T> class ThreadSafeQueue {
+    public:
 	ThreadSafeQueue() = default;
-	~ThreadSafeQueue() { clear(); }
-	ThreadSafeQueue(ThreadSafeQueue &&) = default;
-	ThreadSafeQueue &operator=(ThreadSafeQueue &&) = default;
 
-	ThreadSafeQueue(const ThreadSafeQueue &) = delete;
-	ThreadSafeQueue &operator=(const ThreadSafeQueue &) = delete;
+	~ThreadSafeQueue()
+	{
+		clear();
+	}
+	
+	ThreadSafeQueue(ThreadSafeQueue&&) = default;
+	ThreadSafeQueue& operator=(ThreadSafeQueue&&) = default;
 
-public:
-	[[nodiscard]] const T &front() const
+	ThreadSafeQueue(const ThreadSafeQueue&) = delete;
+	ThreadSafeQueue& operator=(const ThreadSafeQueue&) = delete;
+
+    public:
+	[[nodiscard]] const T& front() const
 	{
 		std::scoped_lock lock(mux);
 		return deque.front();
 	}
 
-	[[nodiscard]] const T &back()
+	[[nodiscard]] const T& back()
 	{
 		std::scoped_lock lock(mux);
 		return deque.back();
 	}
 
-	void push_front(const T &item)
+	void push_front(const T& item)
 	{
 		std::scoped_lock lock(mux);
 		deque.push_front(item);
 	}
 
-	void push_front(T &&item) noexcept
+	void push_front(T&& item) noexcept
 	{
 		std::scoped_lock lock(mux);
 		deque.push_front(std::move(item));
 	}
 
-	void push_back(const T &item)
+	void push_back(const T& item)
 	{
 		std::scoped_lock lock(mux);
 		deque.push_back(item);
 	}
 
-	void push_back(T &&item) noexcept
+	void push_back(T&& item) noexcept
 	{
 		std::scoped_lock lock(mux);
 		deque.push_back(std::move(item));
@@ -82,10 +85,10 @@ public:
 		return t;
 	}
 
-protected:
+    protected:
 	std::mutex mux{};
 	std::deque<T> deque{};
 };
-}
+} // namespace net
 
 #endif // NET_TSQUEUE_H

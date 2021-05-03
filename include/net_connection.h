@@ -8,29 +8,27 @@ namespace net
 {
 constexpr size_t buffer_size = 20 * 1024;
 
-class Connection
-{
-public:
-	Connection(asio::io_context &context, asio::ip::tcp::socket socket, ThreadSafeQueue<std::pair<std::string, std::string>> &messages)
-		: context(context),
-		socket(std::move(socket)),
-		messages_queue(messages),
-		buffer(buffer_size)
-		{
-		}
-
-	void connect(asio::ip::tcp::resolver::results_type &endpoints)
+class Connection {
+    public:
+	Connection(asio::io_context& context, asio::ip::tcp::socket socket,
+		   ThreadSafeQueue<std::pair<std::string, std::string> >& messages)
+		: context(context), socket(std::move(socket)), messages_queue(messages),
+		  buffer(buffer_size)
 	{
-		asio::async_connect(socket, endpoints,
+	}
+
+	void connect(asio::ip::tcp::resolver::results_type& endpoints)
+	{
+		asio::async_connect(
+			socket, endpoints,
 			[this](std::error_code ec, asio::ip::tcp::endpoint endpoints) {
-				if (!ec)
-				{
+				if (!ec) {
 					read();
-				}
-				else
-				{
-					std::cerr << "[net_connection][connect]: " << ec.message() << '\n';
-					std::cerr << "[net_connection][connect]: Endpoints - " << endpoints.address();
+				} else {
+					std::cerr << "[net_connection][connect]: " << ec.message()
+						  << '\n';
+					std::cerr << "[net_connection][connect]: Endpoints - "
+						  << endpoints.address();
 				}
 			});
 	}
@@ -54,36 +52,38 @@ public:
 	void read()
 	{
 		socket.async_read_some(asio::buffer(buffer.data(), buffer.size()),
-			[&](std::error_code ec, std::size_t len) {
-				if (!ec)
-				{
-					std::string msg(buffer.data(), len);
-					(msg.rfind("PING ", 0) == 0) ? send("PONG :tmi.twitch.tv\r\n") : add_to_queue(msg);
-					read();
-				}
-				else
-				{
-					std::cerr << "[net_connection]:[read] " << ec.message() << '\n';
-				}
-			});
+				       [&](std::error_code ec, std::size_t len) {
+					       if (!ec) {
+						       //std::string msg(buffer.data(), len); // Uses one unnecessary string allocation
+						       //(msg.rfind("PING ", 0) == 0) ?
+						       (strcmp(buffer.data(), "PING :tmi.twitch.tv") == 0) ?
+								     send("PONG :tmi.twitch.tv\r\n") :
+								     add_to_queue(msg);
+						       read();
+					       } else {
+						       std::cerr << "[net_connection]:[read] "
+								 << ec.message() << '\n';
+					       }
+				       });
 	}
 
-	void add_to_queue(const std::string &msg)
+	void add_to_queue(const std::string& msg)
 	{
 		std::smatch match;
 		std::regex_search(msg, match, regex);
-		messages_queue.push_back(std::make_pair<std::string, std::string>(std::move(match[1]), std::move(match[3])));
+		messages_queue.push_back(std::make_pair<std::string, std::string>(
+			std::move(match[1]), std::move(match[3])));
 	}
 
-protected:
-	asio::io_context &context;
+    protected:
+	asio::io_context& context;
 	asio::ip::tcp::socket socket;
-	ThreadSafeQueue<std::pair<std::string, std::string>> &messages_queue;
+	ThreadSafeQueue<std::pair<std::string, std::string> >& messages_queue;
 	std::vector<char> buffer;
 
-private:
-	const std::regex regex{"!(.+)@.+ PRIVMSG #([^\\s]+) :(.*)"};
+    private:
+	const std::regex regex{ "!(.+)@.+ PRIVMSG #([^\\s]+) :(.*)" };
 };
-}
+} // namespace net
 
 #endif // NET_CONNECTION_H

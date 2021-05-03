@@ -7,9 +7,8 @@
 
 namespace net
 {
-class ClientInterface
-{
-public:
+class ClientInterface {
+    public:
 	ClientInterface() = default;
 
 	virtual ~ClientInterface()
@@ -17,10 +16,10 @@ public:
 		disconnect();
 	}
 
-	ClientInterface(const ClientInterface &) = delete;
-	ClientInterface(ClientInterface &&) = delete;
-	ClientInterface &operator=(const ClientInterface &) = delete;
-	ClientInterface &operator=(ClientInterface &&) = delete;
+	ClientInterface(const ClientInterface&) = delete;
+	ClientInterface(ClientInterface&&) = delete;
+	ClientInterface& operator=(const ClientInterface&) = delete;
+	ClientInterface& operator=(ClientInterface&&) = delete;
 
 	[[nodiscard]] bool is_connected() const
 	{
@@ -29,16 +28,14 @@ public:
 
 	bool connect(std::string_view host, std::string_view port)
 	{
-		try
-		{
+		try {
 			asio::ip::tcp::resolver resolver(context);
-			asio::ip::tcp::resolver::results_type endpoints = resolver.resolve(host, port);
-			connection = std::make_unique<Connection>(context, asio::ip::tcp::socket(context), messages);
+			auto endpoints = resolver.resolve(host, port);
+			connection = std::make_unique<Connection>(
+				context, asio::ip::tcp::socket(context), messages);
 			connection->connect(endpoints);
 			thread = std::thread([this]() { context.run(); });
-		}
-		catch (std::exception &e)
-		{
+		} catch (std::exception& e) {
 			std::cerr << "[net_client]:[connect] " << e.what() << '\n';
 			return false;
 		}
@@ -61,18 +58,18 @@ public:
 			connection->send(msg);
 	}
 
-protected:
-	[[nodiscard]] auto &messages_queue()
+    protected:
+	[[nodiscard]] auto& messages_queue()
 	{
 		return messages;
 	}
 
-protected:
+    protected:
 	asio::io_context context{};
 	std::thread thread{};
 	std::unique_ptr<Connection> connection{};
-	ThreadSafeQueue<std::pair<std::string, std::string>> messages{};
+	ThreadSafeQueue<std::pair<std::string, std::string> > messages{};
 };
-}
+} // namespace net
 
 #endif // NET_CLIENT_H

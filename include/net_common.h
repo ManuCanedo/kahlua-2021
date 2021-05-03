@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <string>
+#include <string.h>
 #include <string_view>
 #include <memory>
 #include <regex>

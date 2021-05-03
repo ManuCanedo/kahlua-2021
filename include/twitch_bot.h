@@ -6,39 +6,41 @@
 #include "net_client.h"
 #include "net_tsqueue.h"
 
-class TwitchBot : public net::ClientInterface
-{
-public:
-	enum class CommandType
-	{
-		TEXT,
-		VOICE,
-		CUSTOM
-	};
+class TwitchBot : public net::ClientInterface {
+    public:
+	enum class CommandType { TEXT, VOICE, CUSTOM };
 
-public:
-	static void start() { Get().run(); }
-	[[nodiscard]] static TwitchBot &Get()
+    public:
+	static void start()
+	{
+		Get().run();
+	}
+
+	[[nodiscard]] static TwitchBot& Get()
 	{
 		static TwitchBot instance;
 		return instance;
 	}
-	[[nodiscard]] static const std::string &channel_name() { return Get().channel; }
+	
+	[[nodiscard]] static const std::string& channel_name()
+	{
+		return Get().channel;
+	}
 
-private:
+    private:
 	TwitchBot();
 	void load();
 	void login() const;
 	void run();
 
-	void process_message(const std::string &usr, const std::string &msg);
+	void process_message(const std::string& usr, const std::string& msg);
 
-private:
+    private:
 	std::string oauth{};
 	std::string botname{};
 	std::string channel{};
 	std::set<std::string> users{};
-	bool is_running{true};
+	bool is_running{ true };
 };
 
 #endif // TWITCH_BOT_H
