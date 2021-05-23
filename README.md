@@ -1,6 +1,6 @@
 # CoachMe Bot
 
-Twitch Bot written in C++ (ASIO) and embedded Lua.
+A local Cpp Twitch Bot that launches commands defined in a LUA script.
 
 ## Getting Started
 
@@ -9,7 +9,7 @@ Clone and "make run".
 ## Development Checklist
 
 + Net framework: client and connection interfaces (ASIO).
-+ Implemented basic bot that receives and displays Twitch Chat.
++ Implemented simple bot that receives and displays Twitch Chat.
 + Embedding Lua: Configuration params and commands obtained from 'config.lua' file.
 + Integrated FLITE text to speech generator.
 + Implemented customs params that trigger Lua scripts.
