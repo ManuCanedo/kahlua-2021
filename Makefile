@@ -3,9 +3,9 @@ CXX_FLAGS	:= -Wall -Wextra -std=c++17 -ggdb -g -DASIO_STANDALONE
 
 BIN			:= bin
 SRC			:= src
-INCLUDE		:= -I/usr/include -I/home/manu/Dev/Cpp/jaynebot/include -I/usr/include/lua5.1 -I/home/manu/Dev/Cpp/jaynebot/vendor/flite/include
-LIBRARIES	:= -llua5.1 -pthread -lflite_cmu_us_kal -lflite_usenglish -lflite_cmulex -lflite -lm
-EXECUTABLE	:= jaynebot
+INCLUDE		:= -I/usr/include -Iinclude -I/usr/include/lua5.1 -Ivendor/flite/include
+LIBRARIES	:= -llua5.1 -pthread -lm
+EXECUTABLE	:= coachme_bot
 
 all: $(BIN)/$(EXECUTABLE)
 
