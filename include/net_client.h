@@ -18,8 +18,6 @@ public:
 
 	ClientInterface(const ClientInterface&) = delete;
 	ClientInterface(ClientInterface&&) = delete;
-	ClientInterface& operator=(const ClientInterface&) = delete;
-	ClientInterface& operator=(ClientInterface&&) = delete;
 
 	[[nodiscard]] bool is_connected() const
 	{

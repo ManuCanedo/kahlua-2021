@@ -14,64 +14,77 @@ public:
 		clear();
 	}
 
-	ThreadSafeQueue(ThreadSafeQueue&&) = default;
-	ThreadSafeQueue& operator=(ThreadSafeQueue&&) = default;
-
 	ThreadSafeQueue(const ThreadSafeQueue&) = delete;
 	ThreadSafeQueue& operator=(const ThreadSafeQueue&) = delete;
 
+	ThreadSafeQueue(ThreadSafeQueue&&) = default;
+	ThreadSafeQueue& operator=(ThreadSafeQueue&&) = default;
+
 public:
-	[[nodiscard]] const T& front() const
+	[[nodiscard]] const T& front()
 	{
-		std::scoped_lock lock(mux);
+		std::scoped_lock lock(deque_mux);
 		return deque.front();
 	}
 
 	[[nodiscard]] const T& back()
 	{
-		std::scoped_lock lock(mux);
+		std::scoped_lock lock(deque_mux);
 		return deque.back();
 	}
 
 	void push_front(const T& item)
 	{
-		std::scoped_lock lock(mux);
+		std::scoped_lock lock(deque_mux);
 		deque.push_front(item);
+		std::unique_lock<std::mutex> blocker_lock(blocker_mux);
+		blocker.notify_one();
 	}
 
-	void push_front(T&& item) noexcept
+	void push_front(T&& item)
 	{
-		std::scoped_lock lock(mux);
+		std::scoped_lock lock(deque_mux);
 		deque.push_front(std::move(item));
+		std::unique_lock<std::mutex> blocker_lock(blocker_mux);
+		blocker.notify_one();
 	}
 
 	void push_back(const T& item)
 	{
-		std::scoped_lock lock(mux);
+		std::scoped_lock lock(deque_mux);
 		deque.push_back(item);
+		std::unique_lock<std::mutex> blocker_lock(blocker_mux);
+		blocker.notify_one();
 	}
 
-	void push_back(T&& item) noexcept
+	void push_back(T&& item)
 	{
-		std::scoped_lock lock(mux);
+		std::scoped_lock lock(deque_mux);
 		deque.push_back(std::move(item));
+		std::unique_lock<std::mutex> blocker_lock(blocker_mux);
+		blocker.notify_one();
 	}
 
 	[[nodiscard]] size_t size()
 	{
-		std::scoped_lock lock(mux);
+		std::scoped_lock lock(deque_mux);
 		return deque.size();
+	}
+
+	[[nodiscard]] bool empty()
+	{
+		return size() == 0;
 	}
 
 	void clear()
 	{
-		std::scoped_lock lock(mux);
+		std::scoped_lock lock(deque_mux);
 		deque.clear();
 	}
 
 	T pop_front()
 	{
-		std::scoped_lock lock(mux);
+		std::scoped_lock lock(deque_mux);
 		auto t = std::move(deque.front());
 		deque.pop_front();
 		return t;
@@ -79,15 +92,26 @@ public:
 
 	T pop_back()
 	{
-		std::scoped_lock lock(mux);
+		std::scoped_lock lock(deque_mux);
 		auto t = std::move(deque.back());
 		deque.pop_back();
 		return t;
 	}
 
+	void wait()
+	{
+		while (empty()) {
+			std::unique_lock<std::mutex> blocker_lock(blocker_mux);
+			blocker.wait(blocker_lock);
+		}
+	}
+
 protected:
-	std::mutex mux{};
+	std::mutex deque_mux{};
 	std::deque<T> deque{};
+
+	std::mutex blocker_mux{};
+	std::condition_variable blocker{};
 };
 } // namespace net
 

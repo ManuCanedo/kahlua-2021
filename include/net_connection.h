@@ -54,10 +54,8 @@ public:
 		socket.async_read_some(asio::buffer(buffer.data(), buffer.size()),
 				       [&](std::error_code ec, std::size_t len) {
 					       if (!ec) {
-						       //std::string msg(buffer.data(), len); // Uses one unnecessary string allocation
-						       //(msg.rfind("PING ", 0) == 0) ?
-						       (strcmp(buffer.data(),
-							       "PING :tmi.twitch.tv") == 0) ?
+						       std::string msg(buffer.data(), len);
+						       (msg.rfind("PING ", 0) == 0) ?
 								     send("PONG :tmi.twitch.tv\r\n") :
 								     add_to_queue(msg);
 						       read();
