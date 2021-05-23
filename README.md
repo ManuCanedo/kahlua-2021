@@ -1,6 +1,6 @@
 # CoachMe Bot
 
-A local Cpp Twitch Bot that launches commands defined in a LUA script.
+A local Cpp Twitch Bot that launches commands through LUA scripts.
 
 ## Getting Started
 
