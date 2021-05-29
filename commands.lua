@@ -16,6 +16,7 @@ local commands = {}
 commands.roll = function(host, user, args)
     if args then
         -- What to do if called with format "!roll args"
+        send_to_chat(host, user .. " tira los dados y saca " .. math.random(100))
         return
     else
         -- What to do if called with format "!roll"
@@ -25,13 +26,12 @@ end
 
 local deaths = 0
 commands.deaths = function(host, user, args)
-    if args == nil then
-        args = ""
-    end
+    args = args or ""
     deaths = deaths + 1
     local str = _channel .. " has died " .. deaths .. " times."
+
     if deaths > 10 then
-        str = str .. " has reached bot500!" -- Joke referencing Overwatch top500 rank
+        str = str .. " has reached bot500!" -- Overwatch top500 joke
     end
     send_to_chat(host, str)
 end
