@@ -11,7 +11,7 @@ public:
 	enum class CommandType { TEXT, VOICE, CUSTOM };
 
 public:
-	static void start()
+	static void Start()
 	{
 		Get().run();
 	}
@@ -22,7 +22,7 @@ public:
 		return instance;
 	}
 
-	[[nodiscard]] static const std::string& channel_name()
+	[[nodiscard]] static const std::string& Channel()
 	{
 		return Get().channel;
 	}
