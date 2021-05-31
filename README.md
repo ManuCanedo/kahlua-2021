@@ -1,4 +1,4 @@
-# CoachMe Bot
+# Welcome to Coach Me Bot
 
 A lightweight local Twitch Bot written in C++. The behaviour of commands is defined in a lua script. This allows for easy expansion and customization.
 
