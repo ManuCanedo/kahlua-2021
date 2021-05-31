@@ -6,6 +6,8 @@ A local Cpp Twitch Bot that launches commands through LUA scripts.
 
 Clone and "make run".
 
+![colourful-universe](media/colourful-universe-ai.jpg?raw=true "'Colourful Universe', generated with VQGAN+CLIP")
+
 ## Development Checklist
 
 + Net framework: client and connection interfaces (ASIO).
