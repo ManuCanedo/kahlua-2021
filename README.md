@@ -2,11 +2,14 @@
 
 A local Cpp Twitch Bot that launches commands through LUA scripts.
 
+<p align="center">
+![colourful-universe](media/colourful-universe-ai.jpg?raw=true "'Colourful Universe', generated with VQGAN+CLIP")
+*'Colourful Universe', generated with VQGAN+CLIP*
+</p>
+
 ## Getting Started
 
 Clone and "make run".
-
-![colourful-universe](media/colourful-universe-ai.jpg?raw=true "'Colourful Universe', generated with VQGAN+CLIP")
 
 ## Development Checklist
 
