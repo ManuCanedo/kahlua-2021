@@ -5,9 +5,9 @@ A lightweight local Twitch Bot written in C++. The behaviour of commands is defi
 ## Dependencies
 
 ASIO STANDALONE:  
-  *sudo apt-get install -y libasio-dev*  
+   - *sudo apt-get install -y libasio-dev*  
 LUA 5.1:  
-  *sudo apt-get install -y lua5.1* 
+   - *sudo apt-get install -y lua5.1* 
 
 ## Getting Started
 
