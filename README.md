@@ -18,6 +18,7 @@ Clone and "make run".
 
 + Linkedin - https://www.linkedin.com/in/manuel-tabares/
 
+<br><br><hr>
 ![colourful-universe](media/colourful-universe-ai.jpg?raw=true "'Colourful Universe', generated with VQGAN+CLIP")  
 *'Colourful Universe', generated with VQGAN+CLIP*
 
