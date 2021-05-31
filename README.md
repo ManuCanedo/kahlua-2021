@@ -31,6 +31,6 @@ A lightweight local Twitch Bot written in C++. The behaviour of commands is defi
 + Linkedin - https://www.linkedin.com/in/manuel-tabares/
 
 <br><br><hr>
-![science-fiction-galaxy](media/science-fiction-galaxy-ai.jpg?raw=true "'Science Fiction Galaxy', generated with VQGAN+CLIP")
-*'Science Fiction Galaxy' - generated with VQGAN+CLIP*
+![science-fiction-galaxy](media/science-fiction-galaxy-ai.jpg?raw=true "'Science Fiction Galaxy', generated with VQGAN+CLIP")  
+<p align="center">Science-fiction Galaxy - generated with VQGAN+CLIPn</p>
 
