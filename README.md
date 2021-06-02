@@ -13,24 +13,20 @@ A lightweight local Twitch Bot written in C++. The behaviour of commands is defi
 
 ## Getting Started
 
-<p align="justify">
 1) Satisfy dependencies.  
 2) Clone the repository.  
 3) Build with 'make'. Build and execute with 'make run'.  
   If necessary, modify the include paths for *lua5.1* in the makefile.  
 4) Modify the '_oauth' (twitch token) and '_botname' (account name) variables in *config.lua*. Point the bot to the     desired channel modifying '_channel'.  
 5) Start adding custom commands in *commands.lua*  
-</p>
  
 ## Development Checklist
 
-<p align="justify">
 + Net framework: client and connection interfaces (ASIO).
 + Implemented simple bot that receives and displays Twitch Chat.
 + Embedding Lua: Configuration params and commands obtained from 'config.lua' file.
 + Integrated FLITE text to speech generator.
 + Implemented customs params that trigger Lua scripts.
- </p>
 
 ## Stay in touch
 
