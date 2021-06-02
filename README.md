@@ -1,7 +1,9 @@
 # Coach Me Bot
 
+<p align="justify">
 A lightweight local Twitch Bot written in C++. The behaviour of commands is defined in a lua script. This allows for easy expansion and customization.
-
+</p>
+ 
 ## Dependencies
 
  - ASIO STANDALONE  
