@@ -17,9 +17,6 @@ public:
 	ThreadSafeQueue(const ThreadSafeQueue&) = delete;
 	ThreadSafeQueue& operator=(const ThreadSafeQueue&) = delete;
 
-	ThreadSafeQueue(ThreadSafeQueue&&) = default;
-	ThreadSafeQueue& operator=(ThreadSafeQueue&&) = default;
-
 public:
 	[[nodiscard]] const T& front()
 	{

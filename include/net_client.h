@@ -16,9 +16,6 @@ public:
 		disconnect();
 	}
 
-	ClientInterface(const ClientInterface&) = delete;
-	ClientInterface(ClientInterface&&) = delete;
-
 	[[nodiscard]] bool is_connected() const
 	{
 		return (connection) ? connection->is_connected() : false;
