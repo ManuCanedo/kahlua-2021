@@ -106,7 +106,6 @@ public:
 protected:
 	std::mutex deque_mux{};
 	std::deque<T> deque{};
-
 	std::mutex blocker_mux{};
 	std::condition_variable blocker{};
 };

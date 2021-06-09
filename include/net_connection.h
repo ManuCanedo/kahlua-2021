@@ -81,7 +81,7 @@ protected:
 	std::vector<char> buffer;
 
 private:
-	const std::regex regex{ "!(.+)@.+ PRIVMSG #([^\\s]+) :(.*)" };
+	std::regex regex{ "!(.+)@.+ PRIVMSG #([^\\s]+) :(.*)" };
 };
 } // namespace net
 
