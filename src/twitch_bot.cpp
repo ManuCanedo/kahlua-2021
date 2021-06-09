@@ -117,8 +117,8 @@ void TwitchBot::process_message(const std::string& usr, const std::string& msg)
 {
 	lua_State* L = get_lua_handler();
 
-	if (auto usrIt = users.find(usr);
-	    usrIt != users.end() || users.find("all") != users.end()) {
+	if (auto it = users.find(usr);
+	    it != users.end() || users.find("all") != users.end()) {
 		lua_getglobal(L, "_process_message");
 
 		if (lua_isfunction(L, -1)) {
