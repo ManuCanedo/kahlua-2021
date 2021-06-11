@@ -24,6 +24,11 @@ public:
 		return instance;
 	}
 
+	static void Stop()
+	{
+		Get().is_running = false;
+	}
+
 	[[nodiscard]] static const std::string& Channel()
 	{
 		return Get().channel;

@@ -10,7 +10,7 @@ extern "C" {
 void signal_callback_handler(int signum)
 {
 	std::cout << " Caught signal " << signum << ". Exiting." << std::endl;
-	exit(signum);
+	TwitchBot::Stop();
 }
 
 // LUA functions
@@ -81,7 +81,7 @@ TwitchBot::TwitchBot()
 {
 	load();
 	connect("irc.chat.twitch.tv", "6667");
-	std::this_thread::sleep_for(std::chrono::seconds(1));
+	std::this_thread::sleep_for(std::chrono::milliseconds(500));
 	login();
 	std::cout << "Connected to " << channel << "'s chat.\n";
 }
@@ -155,8 +155,8 @@ int main()
 		  << "\t\tClose this window to disconnect me.\n"
 		  << "\t\tIf an error message displays below, please restart me.\n";
 
-
 	TwitchBot::Start();
+	std::cout << "Bot stopped\n";
 
 	return 0;
 }
