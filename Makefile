@@ -7,7 +7,7 @@ INCLUDE		:= -I/usr/include -Iinclude -I/usr/include/lua5.1 -Ivendor/flite/includ
 LIBRARIES	:= -llua5.1 -pthread -lm
 EXECUTABLE	:= coachme_bot
 
-all: $(BIN)/$(EXECUTABLE)
+all: clean $(BIN)/$(EXECUTABLE)
 
 run: clean all
 	@echo "🚀 Executing..."

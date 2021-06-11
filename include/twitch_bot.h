@@ -27,6 +27,7 @@ public:
 	static void Stop()
 	{
 		Get().is_running = false;
+		Get().messages.push_front({}); // wakes waiting thread
 	}
 
 	[[nodiscard]] static const std::string& Channel()

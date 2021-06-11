@@ -9,8 +9,9 @@ extern "C" {
 // CTRL+C Catcher
 void signal_callback_handler(int signum)
 {
-	std::cout << " Caught signal " << signum << ". Exiting." << std::endl;
+	std::cout << "\n\nCaught signal " << signum << ".\n";
 	TwitchBot::Stop();
+	std::cout << "Exited gracefully." << std::endl;
 }
 
 // LUA functions
@@ -18,15 +19,11 @@ lua_State* get_lua_handler(bool exit = false)
 {
 	static lua_State* L = nullptr;
 
-	if (L && exit) {
-		std::cout << "Closing lua\n";
+	if (L && exit)
 		lua_close(L);
-	}
 
-	if (L == nullptr) {
-		std::cout << "Opening lua\n";
+	if (L == nullptr)
 		L = luaL_newstate();
-	}
 
 	return L;
 }
@@ -83,7 +80,7 @@ TwitchBot::TwitchBot()
 	connect("irc.chat.twitch.tv", "6667");
 	std::this_thread::sleep_for(std::chrono::milliseconds(500));
 	login();
-	std::cout << "Connected to " << channel << "'s chat.\n";
+	std::cout << "\nConnected to " << channel << "'s chat.\n";
 }
 
 TwitchBot::~TwitchBot()
@@ -96,7 +93,7 @@ void TwitchBot::run()
 	auto& messages = messages_queue();
 
 	while (is_running) {
-		messages.wait(); // block until a new message in the queue
+		messages.sleep(); // block until a new message in the queue
 		const auto message = messages.pop_front();
 
 		if (message.first != "") {
@@ -156,7 +153,6 @@ int main()
 		  << "\t\tIf an error message displays below, please restart me.\n";
 
 	TwitchBot::Start();
-	std::cout << "Bot stopped\n";
 
-	return 0;
+	return EXIT_SUCCESS;
 }
