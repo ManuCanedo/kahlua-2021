@@ -14,9 +14,20 @@ void signal_callback_handler(int signum)
 }
 
 // LUA functions
-lua_State* get_lua_handler()
+lua_State* get_lua_handler(bool exit = false)
 {
-	static lua_State* L = luaL_newstate();
+	static lua_State* L = nullptr;
+
+	if (L && exit) {
+		std::cout << "Closing lua\n";
+		lua_close(L);
+	}
+
+	if (L == nullptr) {
+		std::cout << "Opening lua\n";
+		L = luaL_newstate();
+	}
+
 	return L;
 }
 
@@ -72,6 +83,12 @@ TwitchBot::TwitchBot()
 	connect("irc.chat.twitch.tv", "6667");
 	std::this_thread::sleep_for(std::chrono::seconds(1));
 	login();
+	std::cout << "Connected to " << channel << "'s chat.\n";
+}
+
+TwitchBot::~TwitchBot()
+{
+	get_lua_handler(true);
 }
 
 void TwitchBot::run()
@@ -136,7 +153,8 @@ int main()
 
 	std::cout << "\n\tHello streamer! I'm your new bot.\n"
 		  << "\t\tClose this window to disconnect me.\n"
-		  << "\t\tIf an error message displays below, please restart me.\n\n";
+		  << "\t\tIf an error message displays below, please restart me.\n";
+
 
 	TwitchBot::Start();
 

@@ -5,7 +5,7 @@ local commands = require 'commands'
 -- Variables indexed by _ are directly accessed by the host app
 
 -- Target channel name
-_channel = "elxokas"
+_channel = "slavensven"
 
 -- Bot account name and oauth token
 _botname = "coachme_bot"

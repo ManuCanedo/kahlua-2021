@@ -11,6 +11,8 @@ public:
 	enum class CommandType { TEXT, VOICE, CUSTOM };
 
 public:
+	~TwitchBot();
+
 	static void Start()
 	{
 		Get().run();
