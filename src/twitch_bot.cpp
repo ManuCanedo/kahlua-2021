@@ -100,6 +100,12 @@ void TwitchBot::run()
 	}
 }
 
+void TwitchBot::pause()
+{
+	is_running = false;
+	messages_queue().push_front({}); // wakes waiting thread
+}
+
 void TwitchBot::load()
 {
 	lua_State* L = get_lua_handler();
