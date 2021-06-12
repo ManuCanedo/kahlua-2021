@@ -15,7 +15,7 @@ void signal_callback_handler(int signum)
 }
 
 // LUA functions
-lua_State* get_lua_handler(bool exit = false)
+lua_State* get_lua_handler()
 {
 	static lua_State* L = nullptr;
 	
@@ -81,7 +81,7 @@ TwitchBot::TwitchBot()
 
 TwitchBot::~TwitchBot()
 {
-	get_lua_handler(true);
+	lua_close(get_lua_handler());
 }
 
 void TwitchBot::run()
