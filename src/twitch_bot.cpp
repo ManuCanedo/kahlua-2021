@@ -17,10 +17,7 @@ void signal_callback_handler(int signum)
 // LUA functions
 lua_State* get_lua_handler()
 {
-	static lua_State* L = nullptr;
-	
-	if (L == nullptr)
-		L = luaL_newstate();
+	static lua_State* L = luaL_newstate();
 	return L;
 }
 
@@ -84,27 +81,6 @@ TwitchBot::~TwitchBot()
 	lua_close(get_lua_handler());
 }
 
-void TwitchBot::run()
-{
-	auto& messages = messages_queue();
-
-	while (is_running) {
-		messages.sleep(); // block until a new message in the queue
-		const auto message = messages.pop_front();
-
-		if (message.first != "") {
-			std::cout << message.first << "\t-->\t" << message.second << "\n";
-			if (message.second[0] == '!')
-				process_message(message.first, message.second);
-		}
-	}
-}
-
-void TwitchBot::pause()
-{
-	is_running = false;
-	messages_queue().push_front({}); // wakes waiting thread
-}
 
 void TwitchBot::load()
 {
@@ -129,21 +105,43 @@ void TwitchBot::login() const
 	}
 }
 
-void TwitchBot::process_message(const std::string& usr, const std::string& msg)
+void TwitchBot::run()
 {
-	lua_State* L = get_lua_handler();
+	auto& messages = messages_queue();
 
-	if (auto it = users.find(usr);
-	    it != users.end() || users.find("all") != users.end()) {
-		lua_getglobal(L, "_process_message");
+	while (is_running) {
+		messages.sleep(); // block until a new message in the queue
+		const auto message = messages.pop_front();
 
-		if (lua_isfunction(L, -1)) {
-			lua_pushlightuserdata(L, this);
-			lua_pushstring(L, usr.data());
-			lua_pushstring(L, msg.data());
-			check_lua(L, lua_pcall(L, 3, 1, 0));
+		if (message.first != "") {
+			std::cout << message.first << "\t-->\t" << message.second << "\n";
+			if (message.second[0] == '!')
+				process_message(message.first, message.second);
 		}
 	}
+}
+
+void TwitchBot::pause()
+{
+	is_running = false;
+	messages_queue().push_front({}); // wakes waiting thread
+}
+
+void TwitchBot::process_message(const std::string& usr, const std::string& msg)
+{
+	if (users.find(usr) == users.end() && users.find("all") == users.end())
+		return;
+	
+	lua_State* L = get_lua_handler();
+	lua_getglobal(L, "_process_message");
+
+	if (lua_isfunction(L, -1)) {
+		lua_pushlightuserdata(L, this);
+		lua_pushstring(L, usr.data());
+		lua_pushstring(L, msg.data());
+		check_lua(L, lua_pcall(L, 3, 1, 0));
+	}
+
 }
 
 int main()
