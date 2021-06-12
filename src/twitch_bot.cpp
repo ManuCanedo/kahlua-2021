@@ -18,13 +18,9 @@ void signal_callback_handler(int signum)
 lua_State* get_lua_handler(bool exit = false)
 {
 	static lua_State* L = nullptr;
-
-	if (L && exit)
-		lua_close(L);
-
+	
 	if (L == nullptr)
 		L = luaL_newstate();
-
 	return L;
 }
 
