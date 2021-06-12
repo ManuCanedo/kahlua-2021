@@ -17,7 +17,7 @@ public:
 
 	static void Stop()
 	{
-		Get.pause();
+		Get().pause();
 	}
 
 	[[nodiscard]] static TwitchBot& Get()
