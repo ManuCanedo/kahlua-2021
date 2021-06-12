@@ -8,20 +8,11 @@
 
 class TwitchBot : public net::ClientInterface {
 public:
-	enum class CommandType { TEXT, VOICE, CUSTOM };
-
-public:
 	~TwitchBot();
 
 	static void Start()
 	{
 		Get().run();
-	}
-
-	[[nodiscard]] static TwitchBot& Get()
-	{
-		static TwitchBot instance;
-		return instance;
 	}
 
 	static void Stop()
@@ -30,6 +21,12 @@ public:
 		Get().messages.push_front({}); // wakes waiting thread
 	}
 
+	[[nodiscard]] static TwitchBot& Get()
+	{
+		static TwitchBot instance;
+		return instance;
+	}
+	
 	[[nodiscard]] static const std::string& Channel()
 	{
 		return Get().channel;
