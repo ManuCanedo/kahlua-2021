@@ -17,8 +17,7 @@ public:
 
 	static void Stop()
 	{
-		Get().is_running = false;
-		Get().messages.push_front({}); // wakes waiting thread
+		Get.pause();
 	}
 
 	[[nodiscard]] static TwitchBot& Get()
@@ -37,6 +36,7 @@ private:
 	void load();
 	void login() const;
 	void run();
+	void pause();
 
 	void process_message(const std::string& usr, const std::string& msg);
 
