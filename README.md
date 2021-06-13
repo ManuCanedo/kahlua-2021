@@ -5,14 +5,14 @@
 Kahlua is a lightweight local Twitch Bot written in C++. The behaviour of commands is defined in a lua script. This allows for easy expansion and customization whithout the need to recompile. Commands can be implemented on live stream as soon as Twitch Chat requests them.
 </p>
 
-## Dependencies
+### Dependencies
 
  - ASIO STANDALONE
 *sudo apt-get install -y libasio-dev*
  - LUA 5.1
 *sudo apt-get install -y lua5.1*
 
-## Getting Started
+### Getting Started
 
 1) Satisfy dependencies.
 2) Clone and 'make'.
@@ -21,7 +21,7 @@ Kahlua is a lightweight local Twitch Bot written in C++. The behaviour of comman
   Point the bot to the desired channel modifying '_channel'.
 4) Implement commands in *commands.lua*
 
-## Development Checklist
+### Development Checklist
 
 + Net framework: client and connection interfaces (ASIO).
 + Implemented initial bot that receives and displays Twitch Chat.
@@ -29,7 +29,7 @@ Kahlua is a lightweight local Twitch Bot written in C++. The behaviour of comman
 + Integrated FLITE text to speech generator.
 + Implemented customs params that trigger lua scripts.
 
-## Stay in touch
+### Stay in touch
 
 + Linkedin - https://www.linkedin.com/in/manuel-tabares/
 
