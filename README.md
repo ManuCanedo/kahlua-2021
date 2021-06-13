@@ -1,7 +1,7 @@
 # Coach Me Bot
 
 <p align="justify">
-A lightweight local Twitch Bot written in C++. The behaviour of commands is defined in a lua script. This allows for easy expansion and customization.
+A lightweight local Twitch Bot written in C++. The behaviour of commands is defined in a lua script. This allows for easy expansion and customization whithout the need to recompile. Commands can be implemented on live stream as soon as Twitch Chat request them.
 </p>
 
 ## Dependencies
@@ -14,19 +14,19 @@ A lightweight local Twitch Bot written in C++. The behaviour of commands is defi
 ## Getting Started
 
 1) Satisfy dependencies.
-2) Clone the repository.
-3) Build with 'make'. Build and execute with 'make run'.
+2) Clone and 'make'.
   If necessary, modify the include paths for *lua5.1* in the makefile.
-4) Modify the '_oauth' (twitch token) and '_botname' (account name) variables in *config.lua*. Point the bot to the     desired channel modifying '_channel'.
-5) Start adding custom commands in *commands.lua*
+3) Modify the '_oauth' (twitch token) and '_botname' (account name) variables in *config.lua*.
+  Point the bot to the desired channel modifying '_channel'.
+4) Implement commands in *commands.lua*
 
 ## Development Checklist
 
 + Net framework: client and connection interfaces (ASIO).
-+ Implemented simple bot that receives and displays Twitch Chat.
-+ Embedding Lua: Configuration params and commands obtained from 'config.lua' file.
++ Implemented initial bot that receives and displays Twitch Chat.
++ Embedding Lua: configuration params obtained from 'config.lua' file.
 + Integrated FLITE text to speech generator.
-+ Implemented customs params that trigger Lua scripts.
++ Implemented customs params that trigger lua scripts.
 
 ## Stay in touch
 
