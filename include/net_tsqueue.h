@@ -34,32 +34,28 @@ public:
 	{
 		std::scoped_lock lock(deque_mux);
 		deque.push_front(item);
-		std::unique_lock<std::mutex> blocker_lock(blocker_mux);
-		blocker.notify_one();
+		wake();
 	}
 
 	void push_front(T&& item)
 	{
 		std::scoped_lock lock(deque_mux);
 		deque.push_front(std::move(item));
-		std::unique_lock<std::mutex> blocker_lock(blocker_mux);
-		blocker.notify_one();
+		wake();
 	}
 
 	void push_back(const T& item)
 	{
 		std::scoped_lock lock(deque_mux);
 		deque.push_back(item);
-		std::unique_lock<std::mutex> blocker_lock(blocker_mux);
-		blocker.notify_one();
+		wake();
 	}
 
 	void push_back(T&& item)
 	{
 		std::scoped_lock lock(deque_mux);
 		deque.push_back(std::move(item));
-		std::unique_lock<std::mutex> blocker_lock(blocker_mux);
-		blocker.notify_one();
+		wake();
 	}
 
 	[[nodiscard]] size_t size()
@@ -95,12 +91,18 @@ public:
 		return t;
 	}
 
-	void wait()
+	void sleep()
 	{
 		while (empty()) {
 			std::unique_lock<std::mutex> blocker_lock(blocker_mux);
 			blocker.wait(blocker_lock);
 		}
+	}
+
+	void wake()
+	{
+		std::unique_lock<std::mutex> blocker_lock(blocker_mux);
+		blocker.notify_one();
 	}
 
 protected:

@@ -68,10 +68,9 @@ public:
 
 	void add_to_queue(const std::string& msg)
 	{
-		std::smatch match;
 		std::regex_search(msg, match, regex);
 		messages_queue.push_back(std::make_pair<std::string, std::string>(
-			std::move(match[1]), std::move(match[3])));
+			std::move(match[1]), std::move(match[2])));
 	}
 
 protected:
@@ -81,7 +80,8 @@ protected:
 	std::vector<char> buffer;
 
 private:
-	std::regex regex{ "!(.+)@.+ PRIVMSG #([^\\s]+) :(.*)" };
+	std::regex regex{ "!(.+)@.+ PRIVMSG #[^\\s]+ :(.*)" };
+	std::smatch match;
 };
 } // namespace net
 
