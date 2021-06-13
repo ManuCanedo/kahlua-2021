@@ -1,7 +1,7 @@
 # Kahlua
 
 <p align="justify">
-A lightweight local Twitch Bot written in C++. The behaviour of commands is defined in a lua script. This allows for easy expansion and customization whithout the need to recompile. Commands can be implemented on live stream as soon as Twitch Chat request them.
+A lightweight local Twitch Bot written in C++. The behaviour of commands is defined in a lua script. This allows for easy expansion and customization whithout the need to recompile. Commands can be implemented on live stream as soon as Twitch Chat requests them.
 </p>
 
 ## Dependencies
