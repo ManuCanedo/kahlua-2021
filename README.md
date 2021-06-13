@@ -34,7 +34,7 @@ A lightweight local Twitch Bot written in C++. The behaviour of commands is defi
 
 <br><hr>
 <p align="center">
-  <br> <img width="1024" height="1024" src="media/science-fiction-galaxy-ai.jpg">
+  <br> <img width="720" height="720" src="media/science-fiction-galaxy-ai.jpg">
   <br> Science-fiction Galaxy - AI generated (vqgan+clip)
 </p>
 
