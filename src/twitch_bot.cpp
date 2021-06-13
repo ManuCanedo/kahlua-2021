@@ -1,3 +1,5 @@
+#include "net_interface.h" // pch
+
 #include "twitch_bot.h"
 
 extern "C" {
@@ -131,7 +133,7 @@ void TwitchBot::process_message(const std::string& usr, const std::string& msg)
 {
 	if (users.find(usr) == users.end() && users.find("all") == users.end())
 		return;
-	
+
 	lua_State* L = get_lua_handler();
 	lua_getglobal(L, "_process_message");
 
