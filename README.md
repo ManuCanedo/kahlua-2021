@@ -2,7 +2,7 @@
 ## The interface between Twitch chat and Lua
 
 <p align="justify">
-Kahlua is a lightweight local Twitch bot written in C++. The behaviour of commands is defined in a lua script. This allows for easy expansion and customization whithout the need to recompile. Commands can be implemented on live stream as soon as Twitch chat requests them.
+Kahlua is a lightweight local Twitch bot written in C++. The behaviour of commands is defined in a lua script. This allows for easy expansion and customization whithout the need to recompile. Commands can be implemented during live stream as soon as Twitch chat requests them.
 </p>
 
 ### Dependencies
