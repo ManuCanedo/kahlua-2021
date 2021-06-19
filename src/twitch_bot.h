@@ -5,6 +5,9 @@ class TwitchBot : public net::ClientInterface {
 public:
 	~TwitchBot();
 
+	TwitchBot(const TwitchBot&) = delete;
+	TwitchBot& operator=(const TwitchBot&) = delete;
+
 	static void Start()
 	{
 		Get().run();
@@ -28,7 +31,7 @@ public:
 
 private:
 	TwitchBot();
-	void load();
+	bool load_config();
 	void login() const;
 	void run();
 	void pause();
@@ -39,7 +42,7 @@ private:
 	std::string oauth{};
 	std::string botname{};
 	std::string channel{};
-	std::set<std::string> users{};
+	std::unordered_set<std::string> users{};
 	bool is_running{ true };
 };
 

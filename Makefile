@@ -5,7 +5,7 @@ BIN			:= bin
 SRC			:= src
 INCLUDE		:= -I/usr/include -Iinclude -I/usr/include/lua5.1
 LIBRARIES	:= -llua5.1 -pthread -lm
-EXECUTABLE	:= coachme_bot
+EXECUTABLE	:= kahlua
 
 PCH_SRC 	:= include/net_interface.h
 CONFIG_FILES = config.lua commands.lua
@@ -18,13 +18,13 @@ run: clean all
 	./$(BIN)/$(EXECUTABLE)
 
 pch:
-	$(CXX) $(CXX_FLAGS) $(PCH_SRC)
+	$(CXX) $(CXX_FLAGS) $(INCLUDE) $(PCH_SRC)
 
 $(BIN)/$(EXECUTABLE): $(SRC)/*.cpp
 	@echo "🚧 Building..."
 	mkdir -p $(BIN)
 	cp -u $(CONFIG_FILES) $(BIN)
-	$(CXX) $(CXX_FLAGS) $(INCLUDE) -include $(PCH_SRC) $^ -o $@ $(LIBRARIES)
+	$(CXX) $(CXX_FLAGS) $(INCLUDE) $^ -o $@ $(LIBRARIES)
 
 clean:
 	@echo "🧹 Cleaning..."
