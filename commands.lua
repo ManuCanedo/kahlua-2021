@@ -16,11 +16,11 @@ local commands = {}
 commands.roll = function(host, user, args)
     if args then
         -- What to do if called with format "!roll args"
-        send_to_chat(host, user .. " tira los dados y saca " .. math.random(100))
+        send_to_chat(host, user .. " rolls the dice: " .. math.random(100))
         return
     else
         -- What to do if called with format "!roll"
-        send_to_chat(host, user .. " tira los dados y saca " .. math.random(100))
+        send_to_chat(host, user .. " rolls the dice: " .. math.random(100))
     end
 end
 
