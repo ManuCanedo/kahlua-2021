@@ -6,6 +6,7 @@
 #include <string_view>
 #include <iostream>
 #include <string.h>
+#include <future>
 #include <string>
 #include <memory>
 #include <regex>

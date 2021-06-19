@@ -5,6 +5,8 @@
 
 namespace net
 {
+constexpr unsigned MAX_SIZE = 128;
+
 template <typename T> class ThreadSafeQueue {
 public:
 	ThreadSafeQueue() = default;
@@ -47,14 +49,18 @@ public:
 	void push_back(const T& item)
 	{
 		std::scoped_lock lock(deque_mux);
-		deque.push_back(item);
+		if (deque.size() < MAX_SIZE) {
+			deque.push_back(item);
+		}
 		wake();
 	}
 
 	void push_back(T&& item)
 	{
 		std::scoped_lock lock(deque_mux);
-		deque.push_back(std::move(item));
+		if (deque.size() < MAX_SIZE) {
+			deque.push_back(item);
+		}
 		wake();
 	}
 
@@ -107,7 +113,7 @@ public:
 
 protected:
 	std::mutex deque_mux{};
-	std::deque<T> deque{};
+	std::deque<T> deque{ MAX_SIZE / 8 };
 	std::mutex blocker_mux{};
 	std::condition_variable blocker{};
 };

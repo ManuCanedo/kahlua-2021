@@ -36,7 +36,7 @@ private:
 	void run();
 	void pause();
 
-	void process_message(const std::string& usr, const std::string& msg);
+	bool process_message(std::string&& usr, std::string&& msg);
 
 private:
 	std::string oauth{};

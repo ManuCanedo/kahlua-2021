@@ -73,13 +73,13 @@ int lua_send(lua_State* L)
 // TwitchBot class definitions
 TwitchBot::TwitchBot()
 {
-	if ((is_running = load_config()))
+	if (!load_config()) {
+		pause();
 		return;
-
+	}
 	connect("irc.chat.twitch.tv", "6667");
 	std::this_thread::sleep_for(std::chrono::milliseconds(500));
 	login();
-	std::cout << "\nConnected to " << channel << "'s chat.\n";
 }
 
 TwitchBot::~TwitchBot()
@@ -113,21 +113,29 @@ void TwitchBot::login() const
 	send("PASS oauth:" + oauth + "\r\n");
 	send("NICK " + botname + "\r\n");
 	send("JOIN #" + channel + "\r\n");
+	std::cout << "\nConnected to " << channel << "'s chat.\n";
 }
 
 void TwitchBot::run()
 {
+	static std::future<bool> promise;
 	auto& messages = messages_queue();
 
 	while (is_running) {
-		messages.sleep(); // block until a new message in the queue
+		messages.sleep();
 		const auto message = messages.pop_front();
 
 		if (message.first == "")
 			continue;
+
 		std::cout << message.first << "\t-->\t" << message.second << "\n";
-		if (message.second[0] == '!')
-			process_message(message.first, message.second);
+		if (message.second[0] != '!')
+			continue;
+
+		if (promise.valid())
+			promise.wait();
+		promise = std::async(std::launch::async, &TwitchBot::process_message, this,
+				     std::move(message.first), std::move(message.second));
 	}
 }
 
@@ -137,21 +145,24 @@ void TwitchBot::pause()
 	messages_queue().push_front({}); // wakes awaiting thread
 }
 
-void TwitchBot::process_message(const std::string& usr, const std::string& msg)
+bool TwitchBot::process_message(std::string&& usr, std::string&& msg)
 {
 	if (users.find(usr) == users.end() && users.find("all") == users.end())
-		return;
+		return true;
 
 	lua_State* L = get_lua_handler();
 	lua_getglobal(L, "_process_message");
-
-	if (!lua_isfunction(L, -1))
-		return;
-
+	if (!lua_isfunction(L, -1)) {
+		std::cerr
+			<< "[TwitchBot]:[process_message] error calling lua '_process_message'.\n";
+		return false;
+	}
 	lua_pushlightuserdata(L, this);
 	lua_pushstring(L, usr.data());
 	lua_pushstring(L, msg.data());
 	check_lua(L, lua_pcall(L, 3, 1, 0));
+
+	return true;
 }
 
 int main()
