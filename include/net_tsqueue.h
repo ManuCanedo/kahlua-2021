@@ -32,34 +32,39 @@ public:
 		return deque.back();
 	}
 
-	void push_front(const T& item)
+	// perfect forwarding for the emplace methods
+	template<typename ... Args>
+	void emplace_front(Args&& ... args)
 	{
 		std::scoped_lock lock(deque_mux);
-		deque.push_front(item);
+		deque.emplace_front(std::forward<Args>(args)...);
 		wake();
 	}
 
-	void push_front(T&& item)
+	template<typename ... Args>
+	void emplace_back(Args&& ... args)
 	{
 		std::scoped_lock lock(deque_mux);
-		deque.push_front(std::move(item));
+		deque.emplace_back(std::forward<Args>(args)...);
 		wake();
 	}
 
-	void push_back(const T& item)
+	template<typename U>
+	void push_back(U&& item)
 	{
 		std::scoped_lock lock(deque_mux);
 		if (deque.size() < MAX_SIZE) {
-			deque.push_back(item);
+			deque.push_back(std::forward<U>(item));
 		}
 		wake();
 	}
 
-	void push_back(T&& item)
+	template<typename U>
+	void push_front(U&& item)
 	{
 		std::scoped_lock lock(deque_mux);
 		if (deque.size() < MAX_SIZE) {
-			deque.push_back(item);
+			deque.push_front(std::forward<U>(item));
 		}
 		wake();
 	}

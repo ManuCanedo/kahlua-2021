@@ -63,7 +63,7 @@ int lua_send(lua_State* L)
 		std::cerr << "[Global]:[lua_send] invalid number of args returned from lua.\n";
 		return 1;
 	}
-	TwitchBot* bot = static_cast<TwitchBot*>(lua_touserdata(L, 1));
+	auto* bot = static_cast<TwitchBot*>(lua_touserdata(L, 1));
 	if (bot->is_connected())
 		bot->send("PRIVMSG #" + bot->Channel() + " :" + lua_tostring(L, 2) + "\r\n");
 
@@ -142,7 +142,7 @@ void TwitchBot::run()
 void TwitchBot::pause()
 {
 	is_running = false;
-	messages_queue().push_front({}); // wakes awaiting thread
+	messages_queue().push_front(std::make_pair<std::string, std::string>({}, {})); // wakes awaiting thread
 }
 
 bool TwitchBot::process_message(std::string&& usr, std::string&& msg)

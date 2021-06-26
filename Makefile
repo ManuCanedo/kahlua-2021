@@ -1,5 +1,5 @@
 CXX			:= g++
-CXX_FLAGS	:= -Wall -Wextra -Wpedantic -std=c++17 -g -DASIO_STANDALONE -O2
+CXX_FLAGS	:= -Wall -Wextra -Wpedantic -std=c++17 -g -DASIO_STANDALONE
 
 BIN			:= bin
 SRC			:= src

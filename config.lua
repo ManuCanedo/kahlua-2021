@@ -6,7 +6,7 @@ local commands = require 'commands'
 --
 
 -- Target channel name
-_channel = "jelty"
+_channel = "ml7support"
 
 -- Bot account name and oauth token
 _botname = "coachme_bot"

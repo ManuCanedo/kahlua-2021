@@ -69,8 +69,7 @@ public:
 	void add_to_queue(const std::string& msg)
 	{
 		std::regex_search(msg, match, regex);
-		messages_queue.push_back(std::make_pair<std::string, std::string>(
-			std::move(match[1]), std::move(match[2])));
+		messages_queue.emplace_back(std::move(match[1]), std::move(match[2]));
 	}
 
 protected:
