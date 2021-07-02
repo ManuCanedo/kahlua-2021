@@ -7,9 +7,9 @@ Kahlua is a lightweight local Twitch bot written in C++. The behaviour of comman
 
 ### Dependencies
 
- - ASIO STANDALONE
+ - ASIO STANDALONE  
 *sudo apt-get install -y libasio-dev*
- - LUA 5.1
+ - LUA 5.1  
 *sudo apt-get install -y lua5.1*
 
 ### Getting Started
