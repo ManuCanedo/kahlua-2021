@@ -6,7 +6,7 @@
 
 namespace net
 {
-constexpr size_t buffer_size = 20 * 1024;
+constexpr std::size_t buffer_size = 20 * 1024;
 
 class Connection {
 public:
@@ -19,18 +19,16 @@ public:
 
 	void connect(asio::ip::tcp::resolver::results_type& endpoints)
 	{
-		asio::async_connect(
-			socket, endpoints,
-			[this](std::error_code ec, asio::ip::tcp::endpoint endpoints) {
-				if (!ec) {
-					read();
-				} else {
-					std::cerr << "[net_connection][connect]: " << ec.message()
-						  << '\n';
-					std::cerr << "[net_connection][connect]: Endpoints - "
-						  << endpoints.address();
-				}
-			});
+		auto on_connect = [this](std::error_code ec, asio::ip::tcp::endpoint endpoints) {
+			if (!ec) {
+				read();
+			} else {
+				std::cerr << "[net_connection][connect]: " << ec.message() << '\n';
+				std::cerr << "[net_connection][connect]: Endpoints - "
+					  << endpoints.address();
+			}
+		};
+		asio::async_connect(socket, endpoints, on_connect);
 	}
 
 	void disconnect()
@@ -51,19 +49,18 @@ public:
 
 	void read()
 	{
-		socket.async_read_some(asio::buffer(buffer.data(), buffer.size()),
-				       [&](std::error_code ec, std::size_t len) {
-					       if (!ec) {
-						       std::string msg(buffer.data(), len);
-						       (msg.rfind("PING ", 0) == 0) ?
-								     send("PONG :tmi.twitch.tv\r\n") :
-								     add_to_queue(msg);
-						       read();
-					       } else {
-						       std::cerr << "[net_connection]:[read] "
-								 << ec.message() << '\n';
-					       }
-				       });
+		auto on_read = [&](std::error_code ec, std::size_t len) {
+			if (!ec) {
+				std::string msg(buffer.data(), len);
+				msg.rfind("PING ", 0) == 0 ? send("PONG tmi.twitch.tv\r\n") :
+								   add_to_queue(msg);
+				read();
+			} else {
+				std::cerr << "[net_connection]:[read] " << ec.message() << '\n';
+				disconnect();
+			}
+		};
+		socket.async_read_some(asio::buffer(buffer.data(), buffer.size()), on_read);
 	}
 
 	void add_to_queue(const std::string& msg)

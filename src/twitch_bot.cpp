@@ -125,9 +125,8 @@ void TwitchBot::run()
 		messages.sleep();
 		const auto message = messages.pop_front();
 
-		if (message.first == "")
+		if (message.first.empty())
 			continue;
-
 		std::cout << message.first << "\t-->\t" << message.second << "\n";
 		if (message.second[0] != '!')
 			continue;

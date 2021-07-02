@@ -5,7 +5,7 @@
 
 namespace net
 {
-constexpr unsigned MAX_SIZE = 128;
+constexpr std::size_t MAX_SIZE = 128;
 
 template <typename T> class ThreadSafeQueue {
 public:
@@ -32,7 +32,6 @@ public:
 		return deque.back();
 	}
 
-	// perfect forwarding for the emplace methods
 	template<typename ... Args>
 	void emplace_front(Args&& ... args)
 	{
