@@ -6,14 +6,13 @@
 
 namespace net
 {
-constexpr std::size_t buffer_size = 20 * 1024;
+constexpr std::size_t BUFFER_SIZE = 1024;
 
 class Connection {
 public:
 	Connection(asio::io_context& context, asio::ip::tcp::socket socket,
 		   ThreadSafeQueue<std::pair<std::string, std::string> >& messages)
-		: context(context), socket(std::move(socket)), messages_queue(messages),
-		  buffer(buffer_size)
+		: context(context), socket(std::move(socket)), messages_queue(messages)
 	{
 	}
 
@@ -73,7 +72,7 @@ protected:
 	asio::io_context& context;
 	asio::ip::tcp::socket socket;
 	ThreadSafeQueue<std::pair<std::string, std::string> >& messages_queue;
-	std::vector<char> buffer;
+	std::array<char, BUFFER_SIZE> buffer{};
 
 private:
 	std::regex regex{ "!(.+)@.+ PRIVMSG #[^\\s]+ :(.*)" };
